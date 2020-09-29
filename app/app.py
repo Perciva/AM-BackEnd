@@ -4,6 +4,7 @@ from ariadne.constants import PLAYGROUND_HTML
 import os
 from app.tools import color as c
 import app.resolver as r
+from app.database import init_db
 
 
 type = load_schema_from_path('./app/schema.graphql')
@@ -11,9 +12,13 @@ type = load_schema_from_path('./app/schema.graphql')
 q = QueryType()
 
 q.set_field('hello', r.hello_resolver)
+
 schema = make_executable_schema(type, q)
 
 app = Flask(__name__)
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
+
+init_db()
 
 @app.route('/')
 def index():
@@ -38,4 +43,4 @@ def graphql_server():
     return jsonify(result), status_code
 
 if __name__ == '__main__':
-    app.run(debug=true);
+    app.run(debug=true)
