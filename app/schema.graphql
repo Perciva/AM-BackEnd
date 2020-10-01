@@ -1,3 +1,12 @@
 type Query{
-    hello: String
+    hello:String!
+    GetUser(username:String!,password:String!):User
+}
+
+type User{
+    Major:String
+    Name:String
+    Role:String
+    UserId:String
+    UserName:String
 }

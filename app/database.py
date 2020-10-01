@@ -12,11 +12,11 @@ Base = declarative_base()
 Base.query = sess.query_property()
 
 def init_db():
-
     import app.model.leader
     from app.model import leader
 
-    l= leader.Leader(1,123,'LI','Alicia',datetime.now(),datetime.now())
+    # l= leader.Leader(1,123,'LI','Alicia',datetime.now(),datetime.now())
+
     sess.add(l)
     sess.commit()
 

@@ -1,24 +1,23 @@
 from flask import Flask, request, jsonify
-from ariadne import graphql_sync, make_executable_schema, QueryType, load_schema_from_path
+from ariadne import graphql_sync, make_executable_schema, QueryType, load_schema_from_path, ObjectType
 from ariadne.constants import PLAYGROUND_HTML
-import os
 from app.tools import color as c
 import app.resolver as r
 from app.database import init_db
 
-
 type = load_schema_from_path('./app/schema.graphql')
 
 q = QueryType()
+user = ObjectType('User')
 
 q.set_field('hello', r.hello_resolver)
+q.set_field('GetUser', r.getUser)
 
-schema = make_executable_schema(type, q)
+schema = make_executable_schema(type, [q,user])
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
-
-init_db()
+# init_db()
 
 @app.route('/')
 def index():
