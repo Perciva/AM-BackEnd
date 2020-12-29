@@ -11,4 +11,11 @@ pipenv install colorama
 flask run
 ```
 
+Running For Second Time:
+```
+pipenv shell
+set flask_app=app/app.p
+flask run
+```
+
 
