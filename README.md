@@ -14,7 +14,7 @@ flask run
 Running For Second Time:
 ```
 pipenv shell
-set flask_app=app/app.p
+set flask_app=app/app.py
 flask run
 ```
 
