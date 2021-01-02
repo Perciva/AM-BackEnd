@@ -1,6 +1,8 @@
+scalar JSON
+
 type Query{
     hello:String!
-    GetUser(username:String!,password:String!):User
+    GetUser(username:String!,password:String!):LoginData
 }
 
 type User{
@@ -9,4 +11,9 @@ type User{
     Role:String
     UserId:String
     UserName:String
+}
+
+type LoginData{
+    UserData: User
+    Token: String
 }
