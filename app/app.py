@@ -3,7 +3,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
-from ariadne import graphql_sync, make_executable_schema, QueryType, load_schema_from_path, ObjectType
+from ariadne import graphql_sync, make_executable_schema, QueryType, load_schema_from_path, ObjectType, MutationType
 from ariadne.constants import PLAYGROUND_HTML
 from app.tools import color as c
 import app.resolver as r
@@ -15,17 +15,25 @@ type = load_schema_from_path('./app/schema.graphql')
 q = QueryType()
 user = ObjectType('User')
 login = ObjectType('LoginData')
+period = ObjectType('Period')
 q.set_field('hello', r.hello_resolver)
 q.set_field('GetUser', r.getUser)
+q.set_field('GetAllPeriods', r.getAllPeriods)
 
-schema = make_executable_schema(type, [q,user,login])
+m = MutationType()
+m.set_field('InsertPeriod', r.InsertPeriod)
+m.set_field('DeletePeriod',r.DeletePeriod)
+m.set_field('UpdatePeriod', r.UpdatePeriod)
+
+schema = make_executable_schema(type, [q,m,user,login])
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'secret'
 jwt = JWTManager(app)
+
+from app.model import period
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
 # init_db()
-
 
 @app.route('/')
 def index():

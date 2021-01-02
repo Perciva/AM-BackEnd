@@ -4,6 +4,7 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
+from app.model import period
 
 @jwt_required
 def hello_resolver(_,info):
@@ -28,6 +29,25 @@ def getUser(_,info,username, password):
             "Token" :  access_token
         }
         return resp
+
+@jwt_required
+def getAllPeriods(_,info):
+    res = period.getAllPeriod()
+    return res
+
+@jwt_required 
+def InsertPeriod(_,info,description,start,end):
+    period.insert(description, start, end)
+    return True
+
+@jwt_required
+def UpdatePeriod(_,info, id, description, start, end):
+    return period.update(id, description, start, end)
+
+@jwt_required
+def DeletePeriod(_,info,id):
+    period.delete(id)
+    return True
 
 
 

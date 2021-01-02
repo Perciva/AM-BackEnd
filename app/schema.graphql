@@ -3,6 +3,16 @@ scalar JSON
 type Query{
     hello:String!
     GetUser(username:String!,password:String!):LoginData
+
+    # periods
+    GetAllPeriods:[Period]
+
+}
+
+type Mutation{
+    InsertPeriod(description:String!, start:String!, end:String!):Boolean
+    UpdatePeriod(id: Int!, description:String!, start:String!, end:String!):Boolean
+    DeletePeriod(id: Int!):Boolean
 }
 
 type User{
@@ -11,6 +21,12 @@ type User{
     Role:String
     UserId:String
     UserName:String
+}
+type Period{
+    id: Int
+    description: String
+    start: String
+    end: String
 }
 
 type LoginData{
