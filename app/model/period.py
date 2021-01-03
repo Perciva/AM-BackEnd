@@ -19,10 +19,10 @@ class Period(Base):
         self.created_at = created_at
         self.updated_at = updated_at
 
-    def __str__(self):
-        output = "id:{},description:{}, start:{}, end:{}, created_at:{}, updated_at:{}"
-        formated = output.format(self.id, self.description, self.start, self.end, self.created_at, self.updated_at)
-        return formated
+    # def __str__(self):
+    #     output = "id:{},description:{}, start:{}, end:{}, created_at:{}, updated_at:{}"
+    #     formated = output.format(self.id, self.description, self.start, self.end, self.created_at, self.updated_at)
+    #     return formated
     
 def insert(description, start, end):
     per = Period(description,start,end, datetime.now(), datetime.now())
@@ -52,10 +52,11 @@ def update(id, description, start, end):
         user.description = description
         user.start = start
         user.end = end
+        user.updated_at = datetime.now()
 
         sess.add(user)
         sess.commit()
-        
+
         return True
     else:
         return False

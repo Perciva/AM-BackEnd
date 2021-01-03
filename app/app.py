@@ -16,16 +16,25 @@ q = QueryType()
 user = ObjectType('User')
 login = ObjectType('LoginData')
 period = ObjectType('Period')
+leader = ObjectType('Leader')
+
 q.set_field('hello', r.hello_resolver)
 q.set_field('GetUser', r.getUser)
+
 q.set_field('GetAllPeriods', r.getAllPeriods)
+q.set_field('GetAllLeader', r.getAllLeader)
+q.set_field('GetLeaderById', r.getLeaderByID)
 
 m = MutationType()
 m.set_field('InsertPeriod', r.InsertPeriod)
 m.set_field('DeletePeriod',r.DeletePeriod)
 m.set_field('UpdatePeriod', r.UpdatePeriod)
 
-schema = make_executable_schema(type, [q,m,user,login])
+m.set_field('InsertLeader',r.InsertLeader)
+m.set_field('DeleteLeader', r.DeleteLeader)
+m.set_field('UpdateLeader', r.UpdateLeader)
+
+schema = make_executable_schema(type, [q,m,user,login,period,leader])
 
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'secret'
@@ -57,4 +66,4 @@ def graphql_server():
     return jsonify(result), status_code
 
 if __name__ == '__main__':
-    app.run(debug=true)
+    app.run(debug=True)
