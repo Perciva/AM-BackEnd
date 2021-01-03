@@ -47,17 +47,12 @@ def update(id, period_id, initial, name):
         return False
 
 def getAllLeader():
-    ls = sess.query(Leader).all()
-    rs = list()
-
-    for l in ls:
-        rs.append(l)
-    
-    return rs
+    ls = sess.query(Leader).all() 
+    return ls
 
 def getLeaderByID(id):
     l = sess.query(Leader).filter_by(id=id).one()
-    print(l.name)
+    # print(l.name)
     return l
 
 

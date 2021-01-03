@@ -1,7 +1,7 @@
 scalar JSON
 
 type Query{
-    
+
     hello:String!
     GetUser(username:String!,password:String!):LoginData
 
@@ -11,6 +11,10 @@ type Query{
     # leader
     GetAllLeader:[Leader]
     GetLeaderById(id:Int!):Leader
+
+    # assistant
+    GetAllAssistant:[Assistant]
+    GetAssistantById(id:Int!):Assistant
 }
 
 type Mutation{
@@ -23,6 +27,20 @@ type Mutation{
     InsertLeader(period_id:Int!, initial:String!, name:String!):Boolean
     UpdateLeader(id:Int!, period_id:Int!, initial:String!, name:String!):Boolean
     DeleteLeader(id:Int!):Boolean
+
+    #assistant
+    InsertAssistant(period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
+    UpdateAssistant(id:Int!, period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
+    DeleteAssistant(id: Int!):Boolean
+
+}
+
+type Assistant{
+    id: Int
+    period_id: Int
+    leader_id: Int
+    initial: String
+    name: String
 }
 
 type Leader{
