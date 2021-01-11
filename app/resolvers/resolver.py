@@ -28,16 +28,28 @@ def getUser(_,info,username, password):
         "username" : username,
         "password" : password
     }
-
-    x = requests.post(URL,data = d)
-    if(x.text == 'null'):
-        return 'null'
-    else :
-        resp = {
-            "UserData": x.json(),
+    temporary = {
+        "Major" : "asd",
+        "Name" : "asd",
+        "Role" : "asd",
+        "UserId": 1,
+        "UserName" : "asdasd"
+    }
+    resp = {
+            "UserData": None,
             "Token" :  access_token
         }
-        return resp
+
+    # x = requests.post(URL,data = d)
+    # x = None
+    # if(x.text == 'null'):
+    #     return 'null'
+    # else :
+    #     resp = {
+    #         "UserData": x.json(),
+    #         "Token" :  access_token
+    #     }
+    return resp
 
 
 
