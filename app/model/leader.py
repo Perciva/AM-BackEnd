@@ -54,4 +54,8 @@ def getLeaderByID(id):
     # print(l.name)
     return l
 
+def getLeaderByPeriodID(period_id):
+    l = sess.query(Leader).filter_by(period_id = period_id).all()
+    return l
+
 
