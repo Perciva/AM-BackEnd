@@ -30,11 +30,10 @@ def delete(id):
     Leader.query.filter_by(id=id).delete()
     sess.commit()
     
-def update(id, period_id, initial, name):
+def update(id, initial, name):
     l = sess.query(Leader).filter_by(id=id).one()
 
     if l != []:
-        l.period_id = period_id
         l.initial = initial
         l.name = name
         l.updated_at = datetime.now()

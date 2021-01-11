@@ -14,8 +14,8 @@ def DeleteLeader(_,info,id):
     return leader.delete(id)
 
 # @jwt_required
-def UpdateLeader(_,info,id, period_id, initial, name):
-    return leader.update(id, period_id, initial, name)
+def UpdateLeader(_,info,id, initial, name):
+    return leader.update(id, initial, name)
 
 # @jwt_required
 def getAllLeader(_,info):

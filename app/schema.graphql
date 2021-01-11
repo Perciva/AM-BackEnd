@@ -25,7 +25,7 @@ type Mutation{
 
     #leader
     InsertLeader(period_id:Int!, initial:String!, name:String!):Boolean
-    UpdateLeader(id:Int!, period_id:Int!, initial:String!, name:String!):Boolean
+    UpdateLeader(id:Int!, initial:String!, name:String!):Boolean
     DeleteLeader(id:Int!):Boolean
 
     #assistant
