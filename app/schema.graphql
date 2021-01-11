@@ -11,7 +11,7 @@ type Query{
     # leader
     GetAllLeader:[Leader]
     GetLeaderById(id:Int!):Leader
-    GetLeaderByPeriodId(period_id:Int!):Leader
+    GetLeaderByPeriodId(period_id:Int!):[Leader]
 
     # assistant
     GetAllAssistant:[Assistant]
