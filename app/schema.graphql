@@ -9,7 +9,6 @@ type Query{
     GetAllPeriods:[Period]
 
     # leader
-    GetAllLeader:[Leader]
     GetLeaderById(id:Int!):Leader
     GetLeaderByPeriodId(period_id:Int!):[Leader]
 
@@ -17,6 +16,9 @@ type Query{
     GetAllAssistant:[Assistant]
     GetAssistantById(id:Int!):Assistant
     GetAssistantByPeriodId(period_id:Int!):[Assistant]
+
+    # holiday
+    GetHolidayByPeriodId(period_id:Int!):[Holiday]
 }
 
 type Mutation{
@@ -34,6 +36,11 @@ type Mutation{
     InsertAssistant(period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
     UpdateAssistant(id:Int!, period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
     DeleteAssistant(id: Int!):Boolean
+
+    #holiday
+    InsertHoliday(period_id:Int!, description:String!, date:String!):Boolean
+    UpdateHoliday(id:Int!, description:String!, date:String!):Boolean
+    DeleteHoliday(id:Int!):Boolean
 
 }
 
@@ -69,4 +76,10 @@ type Period{
 type LoginData{
     UserData: User
     Token: String
+}
+type Holiday{
+    id: Int
+    period_id: Int
+    description: String
+    date: String
 }

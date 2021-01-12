@@ -29,6 +29,7 @@ def insert(period_id, initial, name):
 def delete(id):
     Leader.query.filter_by(id=id).delete()
     sess.commit()
+    return True
     
 def update(id, initial, name):
     l = sess.query(Leader).filter_by(id=id).one()
@@ -45,16 +46,11 @@ def update(id, initial, name):
     else:
         return False
 
-def getAllLeader():
-    ls = sess.query(Leader).all() 
-    return ls
-
 def getLeaderByID(id):
     l = sess.query(Leader).filter_by(id=id).one()
-    # print(l.name)
     return l
 
-def getLeaderByPeriodId(period_id):
+def getLeaderByPeriodID(period_id):
     ls = sess.query(Leader).filter_by(period_id=period_id).all() 
     return ls
 

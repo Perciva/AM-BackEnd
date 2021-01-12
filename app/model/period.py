@@ -44,6 +44,7 @@ def getAllPeriod():
 def delete(id):
     Period.query.filter_by(id=id).delete()
     sess.commit()
+    return True
     pass
 
 def update(id, description, start, end):

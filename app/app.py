@@ -22,13 +22,15 @@ q.set_field('hello', r.hello_resolver)
 q.set_field('GetUser', r.getUser)
 
 q.set_field('GetAllPeriods', r.getAllPeriods)
-q.set_field('GetAllLeader', r.getAllLeader)
 q.set_field('GetLeaderById', r.getLeaderByID)
-q.set_field('GetLeaderByPeriodId', r.getLeaderByPeriodId)
+q.set_field('GetLeaderByPeriodId', r.getLeaderByPeriodID)
 
 q.set_field('GetAllAssistant', r.getAllAssistant)
 q.set_field('GetAssistantById', r.getAssistantByID)
 q.set_field('GetAssistantByPeriodId',r.getAssistantByPeriodID)
+
+q.set_field('GetHolidayByPeriodId', r.getHolidayByPeriodID)
+
 
 m = MutationType()
 m.set_field('InsertPeriod', r.InsertPeriod)
@@ -43,6 +45,10 @@ m.set_field('InsertAssistant', r.InsertAssistant)
 m.set_field('UpdateAssistant', r.UpdateAssistant)
 m.set_field('DeleteAssistant', r.DeleteAssistant)
 
+m.set_field('InsertHoliday', r.InsertHoliday)
+m.set_field('UpdateHoliday', r.UpdateHoliday)
+m.set_field('DeleteHoliday', r.DeleteHoliday)
+
 schema = make_executable_schema(type, [q,m,user,login,period,leader])
 
 app = Flask(__name__)
@@ -51,7 +57,7 @@ jwt = JWTManager(app)
 
 from app.model import period
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
-# init_db()
+init_db()
 
 @app.route('/')
 def index():

@@ -25,5 +25,6 @@ def getAllAssistant(_,info):
 def getAssistantByID(_,info,id):
     return assistant.getAssistantByID(id)
 
+@jwt_required
 def getAssistantByPeriodID(_,info,period_id):
     return assistant.getAssistantByPeriodID(period_id)

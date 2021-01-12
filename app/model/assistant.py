@@ -31,6 +31,7 @@ def insert(period_id, leader_id, initial, name):
 def delete(id):
     Assistant.query.filter_by(id=id).delete()
     sess.commit()
+    return True
 
 def update(id, period_id, leader_id, initial, name):
     ast = sess.query(Assistant).filter_by(id=id).one()
