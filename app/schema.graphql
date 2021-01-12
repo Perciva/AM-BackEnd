@@ -16,6 +16,7 @@ type Query{
     # assistant
     GetAllAssistant:[Assistant]
     GetAssistantById(id:Int!):Assistant
+    GetAssistantByPeriodId(period_id:Int!):[Assistant]
 }
 
 type Mutation{

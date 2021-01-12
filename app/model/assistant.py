@@ -56,6 +56,10 @@ def getAssistantByID(id):
 def getAllAssistant():
     ast = sess.query(Assistant).all()
     return ast
+
+def getAssistantByPeriodID(period_id):
+    ast = sess.query(Assistant).filter_by(period_id = period_id).all()
+    return ast
     
 
 

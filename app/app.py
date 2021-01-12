@@ -28,6 +28,7 @@ q.set_field('GetLeaderByPeriodId', r.getLeaderByPeriodId)
 
 q.set_field('GetAllAssistant', r.getAllAssistant)
 q.set_field('GetAssistantById', r.getAssistantByID)
+q.set_field('GetAssistantByPeriodId',r.getAssistantByPeriodID)
 
 m = MutationType()
 m.set_field('InsertPeriod', r.InsertPeriod)
