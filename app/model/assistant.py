@@ -33,11 +33,10 @@ def delete(id):
     sess.commit()
     return True
 
-def update(id, period_id, leader_id, initial, name):
+def update(id, leader_id, initial, name):
     ast = sess.query(Assistant).filter_by(id=id).one()
 
     if ast != []:
-        ast.period_id = period_id
         ast.leader_id = leader_id
         ast.initial = initial
         ast.name = name

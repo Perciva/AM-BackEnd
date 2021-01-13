@@ -25,3 +25,8 @@ def getLeaderByID(_,info,id):
 def getLeaderByPeriodID(_,info, period_id):
     l=leader.getLeaderByPeriodID(period_id)
     return l
+
+@jwt_required
+def getLeaderByInitial(_,info, initial):
+    l = leader.getLeaderByInitial(initial)
+    return l

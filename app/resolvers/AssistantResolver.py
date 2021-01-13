@@ -13,8 +13,8 @@ def DeleteAssistant(_,info,id):
     return assistant.delete(id)
 
 @jwt_required
-def UpdateAssistant(_,info,id, period_id,leader_id, initial, name):
-    return assistant.update(id, period_id, leader_id, initial, name)
+def UpdateAssistant(_,info,id, leader_id, initial, name):
+    return assistant.update(id, leader_id, initial, name)
 
 @jwt_required
 def getAllAssistant(_,info):

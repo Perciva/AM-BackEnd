@@ -22,8 +22,10 @@ q.set_field('hello', r.hello_resolver)
 q.set_field('GetUser', r.getUser)
 
 q.set_field('GetAllPeriods', r.getAllPeriods)
+
 q.set_field('GetLeaderById', r.getLeaderByID)
 q.set_field('GetLeaderByPeriodId', r.getLeaderByPeriodID)
+q.set_field('GetLeaderByInitial', r.getLeaderByInitial)
 
 q.set_field('GetAllAssistant', r.getAllAssistant)
 q.set_field('GetAssistantById', r.getAssistantByID)
