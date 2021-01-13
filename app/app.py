@@ -57,7 +57,7 @@ jwt = JWTManager(app)
 
 from app.model import period
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
-init_db()
+# init_db()
 
 @app.route('/')
 def index():
