@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from app.app import app
+from ariadne import QueryType, MutationType
 
 # from flask_migrate import Migrate
 engine = create_engine('mysql+pymysql://root:@localhost/testing', 
@@ -17,7 +18,8 @@ Base = declarative_base(bind=engine)
 Base.query = sess.query_property()
 # def init_sql(engine):
 #     pass
-
+query = QueryType()
+mutation = MutationType()
 
 # migrate = Migrate(app,db)
 def init_db():

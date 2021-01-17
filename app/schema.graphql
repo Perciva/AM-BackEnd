@@ -11,7 +11,7 @@ type Query{
     # leader
     GetLeaderById(id:Int!):Leader
     GetLeaderByPeriodId(period_id:Int!):[Leader]
-    GetLeaderByInitialAndPeriod(initial:String!, period_id:Int!):Leader
+    GetLeaderByInitialAndPeriodId(initial:String!, period_id:Int!):Leader
 
     # assistant
     GetAllAssistant:[Assistant]
@@ -35,6 +35,7 @@ type Mutation{
 
     #assistant
     InsertAssistant(period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
+    InsertAssistantByLeaderInitial(period_id:Int!, leader_initial:String!, initial:String!, name:String!):Boolean
     UpdateAssistant(id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
     DeleteAssistant(id: Int!):Boolean
 

@@ -2,7 +2,7 @@ from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey
 from app.database  import db, sess
 from sqlalchemy.orm import relationship
 from datetime import datetime
-import app.model.leader
+
 
 class Assistant(db.Model):
     
@@ -20,21 +20,30 @@ class Assistant(db.Model):
     # shift = db.relationship("Shift", back_populates="assistant")
     # attendance = db.relationship("Attendance", back_populates="assistant")
 
-    def __init__(self, period_id, leader_id, initial, name, created_at, updated_at):
+    def __init__(self, period_id, leader_id, initial, name):
         self.period_id = period_id
         self.leader_id = leader_id
         self.initial = initial
         self.name = name
-        self.created_at = created_at
-        self.updated_at = updated_at
+        self.created_at = datetime.now()
+        self.updated_at = datetime.now()
 
 
 def insert(period_id, leader_id, initial, name):
-    ast = Assistant(period_id, leader_id, initial, name,datetime.now(),datetime.now())
+    ast = Assistant(period_id, leader_id, initial, name)
     sess.add(ast)
     sess.commit()
     return True
 
+def insertByLeaderInitial(period_id, leader_initial, initial, name):
+    from app.model.leader import Leader
+    leader = sess.query(Leader).filter_by(initial=leader_initial).first()
+
+    ast = Assistant(period_id, leader.id, initial, name)
+    sess.add(ast)
+    sess.commit()
+
+    pass
 
 def delete(id):
     Assistant.query.filter_by(id=id).delete()
