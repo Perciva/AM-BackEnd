@@ -3,6 +3,10 @@ from flask_jwt_extended import (
     JWTManager, jwt_required, create_access_token,
     get_jwt_identity
 )
+
+app = Flask(__name__)
+app.config['JWT_SECRET_KEY'] = 'secret'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/testing'
 from ariadne import graphql_sync, make_executable_schema, QueryType, load_schema_from_path, ObjectType, MutationType
 from ariadne.constants import PLAYGROUND_HTML
 from app.tools import color as c
@@ -53,16 +57,17 @@ m.set_field('DeleteHoliday', r.DeleteHoliday)
 
 schema = make_executable_schema(type, [q,m,user,login,period,leader])
 
-app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = 'secret'
+# app = Flask(__name__)
+# app.config['JWT_SECRET_KEY'] = 'secret'
 jwt = JWTManager(app)
 
 from app.model import period
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/attendance'
-# init_db()
+
 
 @app.route('/')
 def index():
+    init_db()
     return "hi RIG"
 
 @app.route("/graphql", methods=["GET"])

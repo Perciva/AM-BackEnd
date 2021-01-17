@@ -1,16 +1,20 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP
-from app.database  import Base, sess
+from app.database import db, sess
 from datetime import datetime
+from app.model.period import Period
 
-class Leader(Base):
+
+class Leader(db.Model):
     __tablename__ = 'leaders'
-    id = Column(Integer, primary_key = True)
-    period_id = Column('period_id', Integer)
-    initial = Column('initial', String(6), unique=True)
-    name = Column('name', String(255))
-    created_at = Column('created_at', TIMESTAMP)
-    updated_at = Column('updated_at', TIMESTAMP)
+    id = db.Column(db.Integer, primary_key=True)
+    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id'))
+    initial = db.Column('initial', db.String(6), unique=True)
+    name = db.Column('name', db.String(255))
+    created_at = db.Column('created_at', db.TIMESTAMP)
+    updated_at = db.Column('updated_at', db.TIMESTAMP)
 
+    period = db.relationship("Period", back_populates="leader")
+    assistant = db.relationship("Assistant", back_populates="leader")
 
     def __init__(self, period_id, initial, name, created_at, updated_at):
         self.period_id = period_id
@@ -26,11 +30,13 @@ def insert(period_id, initial, name):
     sess.commit()
     return True
 
+
 def delete(id):
-    Leader.query.filter_by(id=id).delete()
+    sess.query.filter_by(id=id).delete()
     sess.commit()
     return True
-    
+
+
 def update(id, initial, name):
     l = sess.query(Leader).filter_by(id=id).one()
 
@@ -46,16 +52,22 @@ def update(id, initial, name):
     else:
         return False
 
+
 def getLeaderByID(id):
     l = sess.query(Leader).filter_by(id=id).one()
     return l
 
+
 def getLeaderByPeriodID(period_id):
-    ls = sess.query(Leader).filter_by(period_id=period_id).all() 
+    from pprint import pprint
+    ls = sess.query(Leader).filter(Leader.period_id == Period.id).all()
+
+    for a in ls:
+        print(a.period.description)
+
     return ls
+
 
 def getLeaderByInitial(initial):
     ls = sess.query(Leader).filter_by(initial=initial).one_or_none()
     return ls
-
-

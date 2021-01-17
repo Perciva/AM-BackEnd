@@ -10,16 +10,16 @@ def getAllPeriods(_,info):
     res = period.getAllPeriod()
     return res
 
-@jwt_required 
+# @jwt_required
 def InsertPeriod(_,info,description,start,end):
     period.insert(description, start, end)
     return True
 
-@jwt_required
+# @jwt_required
 def UpdatePeriod(_,info, id, description, start, end):
     return period.update(id, description, start, end)
 
-@jwt_required
+# @jwt_required
 def DeletePeriod(_,info,id):
     period.delete(id)
     return True

@@ -1,29 +1,40 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
+from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from app.app import app
 
+# from flask_migrate import Migrate
 engine = create_engine('mysql+pymysql://root:@localhost/testing', echo=True)
 sess = scoped_session(sessionmaker(autocommit=False,
-                                         autoflush=False,
-                                         bind=engine))
+                                   autoflush=False,
+                                   bind=engine))
 
-Base = declarative_base()
+db = SQLAlchemy(app)
+Base = declarative_base(bind=engine)
 Base.query = sess.query_property()
+# def init_sql(engine):
+#     pass
 
+
+# migrate = Migrate(app,db)
 def init_db():
-    import app.model.leader
-    from app.model import leader, assistant,period, holiday
-
-    # i= leader.Leader(1,123,'LI','Alicia',datetime.now(),datetime.now())
-    # l= assistant.Assistant(1,123,1,'AB','Alberic',datetime.now(),datetime.now())
-    # p = period.Period("odd semester 19/20","2019-01-01","2019-07-01",datetime.now(),datetime.now())
+    from app.model.leader import Leader
+    from app.model.attendance import Attendance
+    from app.model.shift import Shift
+    from app.model.leader import Leader
+    from app.model.assistant import Assistant
+    from app.model.special_shift import SpecialShift
+    from app.model.period import Period
+    #
+    # p = Period("odd semester 19/20","2019-01-01","2019-07-01",datetime.now(),datetime.now())
+    # i= Leader(4,'LI','Alicia',datetime.now(),datetime.now())
+    # l= Assistant(4,1,'AB','Alberic',datetime.now(),datetime.now())
+    # sess.add(p)
     # sess.add(l)
     # sess.add(i)
     # print("THIS")
-    # sess.add(p)
-    sess.commit()
-
-    Base.metadata.create_all(bind=engine)
-
-
+    # sess.commit()
+    #
+    db.create_all()

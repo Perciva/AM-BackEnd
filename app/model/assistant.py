@@ -1,16 +1,24 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP
-from app.database  import Base, sess
+from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey
+from app.database  import db, sess
+from sqlalchemy.orm import relationship
 from datetime import datetime
+import app.model.leader
 
-class Assistant(Base):
+class Assistant(db.Model):
+    
     __tablename__ = 'assistants'
-    id = Column(Integer, primary_key = True)
-    period_id = Column('period_id', Integer)
-    leader_id = Column('leader_id', Integer)
-    initial = Column('initial', String(6), unique=True )
-    name = Column('name', String(255))
-    created_at = Column('created_at', TIMESTAMP)
-    updated_at = Column('updated_at', TIMESTAMP)
+    id = db.Column(db.Integer, primary_key = True)
+    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id'))
+    leader_id = db.Column('leader_id', db.Integer, db.ForeignKey('leaders.id'))
+    initial = db.Column('initial', db.String(6), unique=True)
+    name = db.Column('name', db.String(255))
+    created_at = db.Column('created_at', db.TIMESTAMP)
+    updated_at = db.Column('updated_at', db.TIMESTAMP)
+
+    period = db.relationship("Period", back_populates="assistant")
+    leader = db.relationship("Leader", back_populates="assistant")
+    # shift = db.relationship("Shift", back_populates="assistant")
+    # attendance = db.relationship("Attendance", back_populates="assistant")
 
     def __init__(self, period_id, leader_id, initial, name, created_at, updated_at):
         self.period_id = period_id
@@ -55,11 +63,17 @@ def getAssistantByID(id):
 
 def getAllAssistant():
     ast = sess.query(Assistant).all()
+    
     return ast
 
 def getAssistantByPeriodID(period_id):
     ast = sess.query(Assistant).filter_by(period_id = period_id).all()
     return ast
+
+# def getAssistantWithLeaderByPeriod():
+#     ast = sess.query(Assistant).join(Leader)
+
+
     
 
 

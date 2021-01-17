@@ -1,16 +1,21 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, Date
-from app.database  import Base, sess
+from app.database  import db, sess
+from sqlalchemy.orm import relationship
 from datetime import datetime
 
-class Period(Base):
+class Period(db.Model):
     __tablename__ = 'periods'
-    id = Column(Integer, primary_key = True)
-    description = Column('description', String(255))
-    start = Column('start', Date)
-    end = Column('end', Date)
-    created_at = Column('created_at', TIMESTAMP)
-    updated_at = Column('updated_at', TIMESTAMP)
+    id = db.Column(db.Integer, primary_key = True)
+    description = db.Column('description', db.String(255))
+    start = db.Column('start', db.Date)
+    end = db.Column('end', db.Date)
+    created_at = db.Column('created_at', db.TIMESTAMP)
+    updated_at = db.Column('updated_at', db.TIMESTAMP)
 
+    # special_shift_relationship = db.relationship("SpecialShift", back_populates="period")
+    assistant = db.relationship("Assistant", back_populates="period")
+    leader = db.relationship("Leader", back_populates="period")
+    holiday = db.relationship("Holiday", back_populates="period")
 
     def __init__(self,description, start, end, created_at, updated_at):
         self.description = description
@@ -35,17 +40,15 @@ def getAllPeriod():
     users = sess.query(Period).all()
     res = list()
     for user in users:
-        # print(user)
         res.append(user)
 
     # print(res)
     return res
 
 def delete(id):
-    Period.query.filter_by(id=id).delete()
+    sess.query(Period).filter_by(id=id).delete()
     sess.commit()
     return True
-    pass
 
 def update(id, description, start, end):
     user = sess.query(Period).filter_by(id=id).one()

@@ -17,6 +17,7 @@ type Query{
     GetAllAssistant:[Assistant]
     GetAssistantById(id:Int!):Assistant
     GetAssistantByPeriodId(period_id:Int!):[Assistant]
+    GetAssistantWithLeaderByPeriod(period_id:Int!):[Assistant]
 
     # holiday
     GetHolidayByPeriodId(period_id:Int!):[Holiday]
@@ -47,15 +48,15 @@ type Mutation{
 
 type Assistant{
     id: Int
-    period_id: Int
-    leader_id: Int
+    period: Period
+    leader: Leader
     initial: String
     name: String
 }
 
 type Leader{
     id: Int
-    period_id:Int
+    period: Period
     initial: String
     name: String
 }
@@ -80,7 +81,7 @@ type LoginData{
 }
 type Holiday{
     id: Int
-    period_id: Int
+    period: Period
     description: String
     date: String
 }
