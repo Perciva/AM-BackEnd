@@ -6,7 +6,8 @@ from datetime import datetime
 from app.app import app
 
 # from flask_migrate import Migrate
-engine = create_engine('mysql+pymysql://root:@localhost/testing', echo=True)
+engine = create_engine('mysql+pymysql://root:@localhost/testing', 
+                        echo=True, pool_size=1000, max_overflow=0)
 sess = scoped_session(sessionmaker(autocommit=False,
                                    autoflush=False,
                                    bind=engine))
