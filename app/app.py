@@ -29,7 +29,7 @@ q.set_field('GetAllPeriods', r.getAllPeriods)
 
 q.set_field('GetLeaderById', r.getLeaderByID)
 q.set_field('GetLeaderByPeriodId', r.getLeaderByPeriodID)
-q.set_field('GetLeaderByInitial', r.getLeaderByInitial)
+q.set_field('GetLeaderByInitialAndPeriod', r.getLeaderByInitialAndPeriod)
 
 q.set_field('GetAllAssistant', r.getAllAssistant)
 q.set_field('GetAssistantById', r.getAssistantByID)

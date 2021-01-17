@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy import and_
 from app.database import db, sess
 from datetime import datetime
 from app.model.period import Period
@@ -68,6 +68,6 @@ def getLeaderByPeriodID(period_id):
     return ls
 
 
-def getLeaderByInitial(initial):
-    ls = sess.query(Leader).filter_by(initial=initial).one_or_none()
+def getLeaderByInitialAndPeriod(initial, period_id):
+    ls = sess.query(Leader).filter(and_(Leader.initial.like(initial), Leader.period_id.like(period_id))).one_or_none()
     return ls

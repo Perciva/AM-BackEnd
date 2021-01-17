@@ -11,13 +11,12 @@ type Query{
     # leader
     GetLeaderById(id:Int!):Leader
     GetLeaderByPeriodId(period_id:Int!):[Leader]
-    GetLeaderByInitial(initial:String!):Leader
+    GetLeaderByInitialAndPeriod(initial:String!, period_id:Int!):Leader
 
     # assistant
     GetAllAssistant:[Assistant]
     GetAssistantById(id:Int!):Assistant
     GetAssistantByPeriodId(period_id:Int!):[Assistant]
-    GetAssistantWithLeaderByPeriod(period_id:Int!):[Assistant]
 
     # holiday
     GetHolidayByPeriodId(period_id:Int!):[Holiday]
