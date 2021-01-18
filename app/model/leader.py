@@ -60,7 +60,7 @@ def getLeaderByID(id):
 
 def getLeaderByPeriodID(period_id):
     from pprint import pprint
-    ls = sess.query(Leader).filter(Leader.period_id == Period.id).all()
+    ls = sess.query(Leader).filter(Leader.period_id == Period.id).filter(Leader.period_id == period_id).all()
 
     for a in ls:
         print(a.period.description)
