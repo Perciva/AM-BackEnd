@@ -46,7 +46,7 @@ def insertByLeaderInitial(period_id, leader_initial, initial, name):
     pass
 
 def delete(id):
-    ast = sess.query(Assistant).filter_by(id=id).delete()
+    ast = sess.query(Assistant).filter_by(id=id).one()
     sess.delete(ast)
     sess.commit()
     return True
