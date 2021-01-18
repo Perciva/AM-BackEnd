@@ -5,6 +5,7 @@ from flask_jwt_extended import (
     get_jwt_identity
 )
 from app.model import period
+from app.database import query
 
 
 try:
@@ -15,12 +16,9 @@ try:
     from app.resolvers.ShiftResolver import *
 except ImportError:
     print ('importing modulename failed')
-    
-@jwt_required
-def hello_resolver(_,info):
-    print(info)
-    return "Hello There!!!"
 
+
+@query.field("GetUser")
 def getUser(_,info,username, password):
     URL = "https://laboratory.binus.ac.id/lapi/api/Account/LogOnQualification"
 
@@ -30,27 +28,26 @@ def getUser(_,info,username, password):
         "username" : username,
         "password" : password
     }
-    temporary = {
-        "Major" : "asd",
-        "Name" : "asd",
-        "Role" : "asd",
-        "UserId": 1,
-        "UserName" : "asdasd"
-    }
-    resp = {
-            "UserData": None,
-            "Token" :  access_token
-        }
-
-    # x = requests.post(URL,data = d)
-    # x = None
-    # if(x.text == 'null'):
-    #     return 'null'
-    # else :
-    #     resp = {
-    #         "UserData": x.json(),
+    # temporary = {
+    #     "Major" : "asd",
+    #     "Name" : "asd",
+    #     "Role" : "asd",
+    #     "UserId": 1,
+    #     "UserName" : "asdasd"
+    # }
+    # resp = {
+    #         "UserData": None,
     #         "Token" :  access_token
     #     }
+
+    x = requests.post(URL,data = d)
+    if x.text == 'null':
+        return 'null'
+    else :
+        resp = {
+            "UserData": x.json(),
+            "Token" :  access_token
+        }
     return resp
 
 
