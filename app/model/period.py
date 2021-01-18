@@ -1,11 +1,12 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, Date
-from app.database  import db, sess
+from app.database import db, sess
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
+
 class Period(db.Model):
     __tablename__ = 'periods'
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     description = db.Column('description', db.String(255))
     start = db.Column('start', db.Date)
     end = db.Column('end', db.Date)
@@ -13,11 +14,11 @@ class Period(db.Model):
     updated_at = db.Column('updated_at', db.TIMESTAMP)
 
     # special_shift_relationship = db.relationship("SpecialShift", back_populates="period")
-    assistant = db.relationship("Assistant", back_populates="period")
-    leader = db.relationship("Leader", back_populates="period")
-    holiday = db.relationship("Holiday", back_populates="period")
+    assistant = db.relationship("Assistant", back_populates="period", cascade="all, delete, merge, save-update")
+    leader = db.relationship("Leader", back_populates="period", cascade="all, delete, merge, save-update")
+    holiday = db.relationship("Holiday", back_populates="period", cascade="all, delete, merge, save-update")
 
-    def __init__(self,description, start, end, created_at, updated_at):
+    def __init__(self, description, start, end, created_at, updated_at):
         self.description = description
         self.end = end
         self.start = start
@@ -28,27 +29,30 @@ class Period(db.Model):
     #     output = "id:{},description:{}, start:{}, end:{}, created_at:{}, updated_at:{}"
     #     formated = output.format(self.id, self.description, self.start, self.end, self.created_at, self.updated_at)
     #     return formated
-    
+
+
 def insert(description, start, end):
-    per = Period(description,start,end, datetime.now(), datetime.now())
+    per = Period(description, start, end, datetime.now(), datetime.now())
     sess.add(per)
     # sess.flush()
     # print(per.id)
     sess.commit()
+
 
 def getAllPeriod():
     users = sess.query(Period).all()
     res = list()
     for user in users:
         res.append(user)
-
     # print(res)
     return res
+
 
 def delete(id):
     sess.query(Period).filter_by(id=id).delete()
     sess.commit()
     return True
+
 
 def update(id, description, start, end):
     user = sess.query(Period).filter_by(id=id).one()
@@ -66,9 +70,3 @@ def update(id, description, start, end):
         return False
 
     pass
-
-
-
-
-
-

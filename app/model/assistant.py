@@ -8,8 +8,8 @@ class Assistant(db.Model):
     
     __tablename__ = 'assistants'
     id = db.Column(db.Integer, primary_key = True)
-    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id'))
-    leader_id = db.Column('leader_id', db.Integer, db.ForeignKey('leaders.id'))
+    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id', ondelete="CASCADE"))
+    leader_id = db.Column('leader_id', db.Integer, db.ForeignKey('leaders.id', ondelete="CASCADE"))
     initial = db.Column('initial', db.String(6), unique=True)
     name = db.Column('name', db.String(255))
     created_at = db.Column('created_at', db.TIMESTAMP)
@@ -17,7 +17,7 @@ class Assistant(db.Model):
 
     period = db.relationship("Period", back_populates="assistant")
     leader = db.relationship("Leader", back_populates="assistant")
-    shift = db.relationship("Shift", back_populates="assistant")
+    shift = db.relationship("Shift", back_populates="assistant", cascade="all, delete, merge, save-update")
     # attendance = db.relationship("Attendance", back_populates="assistant")
 
     def __init__(self, period_id, leader_id, initial, name):

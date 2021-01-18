@@ -6,7 +6,7 @@ from datetime import datetime
 class Shift(db.Model):
     __tablename__ = 'shifts'
     id = db.Column(db.Integer, primary_key=True)
-    assistant_id = db.Column('assistant_id', db.Integer, db.ForeignKey('assistants.id'))
+    assistant_id = db.Column('assistant_id', db.Integer, db.ForeignKey('assistants.id', ondelete="CASCADE"))
     day = db.Column('day', db.Integer)
     _in = db.Column('in', db.Time)
     _out = db.Column('out', db.Time)
@@ -32,9 +32,8 @@ def insert(assistant_id, day, _in, _out):
 
 
 def delete(id):
-    print(id)
-    shift = sess.query(Shift).filter_by(id=id).delete()
-    sess.delete(shift)
+    sh = sess.query(Shift).filter_by(id=id).one()
+    sess.delete(sh)
 
     sess.commit()
     return True

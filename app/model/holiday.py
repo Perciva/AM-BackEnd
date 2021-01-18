@@ -5,8 +5,9 @@ from datetime import datetime
 
 class Holiday(db.Model):
     __tablename__ = 'holidays'
+
     id = db.Column(db.Integer, primary_key=True)
-    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id'))
+    period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id', ondelete="CASCADE"))
     description = db.Column('description', db.String(255))
     date = db.Column('date', db.Date)
     created_at = db.Column('created_at', db.TIMESTAMP)

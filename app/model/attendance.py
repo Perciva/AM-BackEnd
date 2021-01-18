@@ -7,7 +7,7 @@ class Attendance(db.Model):
     __tablename__ = 'attendances'
 
     id = db.Column(db.Integer, primary_key=True)
-    assistant_id = db.Column('assistant_id', db.Integer, db.ForeignKey('assistants.id'))
+    assistant_id = db.Column('assistant_id', db.Integer, db.ForeignKey('assistants.id', ondelete="CASCADE"))
     # assistant = db.relationship("Assistant", back_populates="attendance")
     date = db.Column('date', db.Date)
     _in = db.Column('in', db.Time)
