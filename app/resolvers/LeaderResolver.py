@@ -4,17 +4,17 @@ from app.database import query, mutation
 
 @mutation.field("InsertLeader")
 # @jwt_required
-def InsertLeader(_,info,period_id, initial, name):
+def insertLeader(_,info,period_id, initial, name):
     return leader.insert(period_id, initial, name)
 
 @mutation.field("DeleteLeader")
 # @jwt_required
-def DeleteLeader(_,info,id):
+def deleteLeader(_,info,id):
     return leader.delete(id)
 
 @mutation.field("UpdateLeader")
 # @jwt_required
-def UpdateLeader(_,info,id, initial, name):
+def updateLeader(_,info,id, initial, name):
     return leader.update(id, initial, name)
 
 @query.field("GetLeaderById")

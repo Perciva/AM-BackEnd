@@ -18,11 +18,12 @@ login = ObjectType('LoginData')
 period = ObjectType('Period')
 leader = ObjectType('Leader')
 assistant = ObjectType('Assistant')
+shift = ObjectType('Shift')
 
 type = load_schema_from_path('./app/schema.graphql')
 
 
-schema = make_executable_schema(type, [query ,mutation, assistant, leader, login, user, period])
+schema = make_executable_schema(type, [query, mutation, assistant, leader, login, user, period, shift])
 
 # app = Flask(__name__)
 # app.config['JWT_SECRET_KEY'] = 'secret'

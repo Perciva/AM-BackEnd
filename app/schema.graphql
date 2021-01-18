@@ -1,7 +1,6 @@
 scalar JSON
 
 type Query{
-
     hello:String!
     GetUser(username:String!,password:String!):LoginData
 
@@ -20,6 +19,9 @@ type Query{
 
     # holiday
     GetHolidayByPeriodId(period_id:Int!):[Holiday]
+
+    #shift
+    GetAssistantShifts(assistant_id:Int!):[Shift]
 }
 
 type Mutation{
@@ -44,6 +46,20 @@ type Mutation{
     UpdateHoliday(id:Int!, description:String!, date:String!):Boolean
     DeleteHoliday(id:Int!):Boolean
 
+    #Shift
+    InsertShift(assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
+    UpdateShift(id:Int!, assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
+    DeleteShift(id:Int!):Boolean
+    DeleteAllAssistantShifts(assistant_id:Int!):Boolean
+
+}
+
+type Shift {
+    id : Int
+    assistant: Assistant
+    day : Int
+    _in : String
+    _out : String
 }
 
 type Assistant{

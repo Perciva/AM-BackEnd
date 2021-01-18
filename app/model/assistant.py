@@ -17,7 +17,7 @@ class Assistant(db.Model):
 
     period = db.relationship("Period", back_populates="assistant")
     leader = db.relationship("Leader", back_populates="assistant")
-    # shift = db.relationship("Shift", back_populates="assistant")
+    shift = db.relationship("Shift", back_populates="assistant")
     # attendance = db.relationship("Attendance", back_populates="assistant")
 
     def __init__(self, period_id, leader_id, initial, name):
@@ -46,7 +46,8 @@ def insertByLeaderInitial(period_id, leader_initial, initial, name):
     pass
 
 def delete(id):
-    Assistant.query.filter_by(id=id).delete()
+    ast = sess.query(Assistant).filter_by(id=id).delete()
+    sess.delete(ast)
     sess.commit()
     return True
 
