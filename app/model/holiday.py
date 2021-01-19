@@ -31,7 +31,7 @@ def insert(period_id, description, date):
 
 
 def delete(id):
-    Holiday.query.filter_by(id=id).delete()
+    sess.query(Holiday).filter_by(id=id).delete()
     sess.commit()
     return True
 

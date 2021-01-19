@@ -48,9 +48,13 @@ type Mutation{
 
     #Shift
     InsertShift(assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
+    InsertShiftByAssistantInitial(assistant_initial:String!, day:Int!, _in:String!, _out:String!):String
     UpdateShift(id:Int!, assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
     DeleteShift(id:Int!):Boolean
     DeleteAllAssistantShifts(assistant_id:Int!):Boolean
+
+    #Special Shift
+    InsertSpecialShift(period_id:Int!, description:String!, assistant_ids:String!, date:String!, _in:String!, _out:String!):String
 
 }
 
@@ -89,6 +93,15 @@ type Period{
     description: String
     start: String
     end: String
+}
+type SpecialShift{
+    id : Int
+    period: Period
+    description : String
+    assistant_ids: String
+    date : String
+    _in : String
+    _out : String
 }
 
 type LoginData{

@@ -23,12 +23,13 @@ mutation = MutationType()
 
 # migrate = Migrate(app,db)
 def init_db():
+    from app.model.special_shift import SpecialShift
     from app.model.leader import Leader
     from app.model.attendance import Attendance
     from app.model.shift import Shift
     from app.model.leader import Leader
     from app.model.assistant import Assistant
-    from app.model.special_shift import SpecialShift
+
     from app.model.period import Period
     #
     # p = Period("odd semester 19/20","2019-01-01","2019-07-01",datetime.now(),datetime.now())

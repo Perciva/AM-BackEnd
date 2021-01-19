@@ -13,7 +13,8 @@ class Period(db.Model):
     created_at = db.Column('created_at', db.TIMESTAMP)
     updated_at = db.Column('updated_at', db.TIMESTAMP)
 
-    # special_shift_relationship = db.relationship("SpecialShift", back_populates="period")
+    special_shift_relationship = db.relationship("SpecialShift", back_populates="period", cascade="all, delete, merge, "
+                                                                                                  "save-update")
     assistant = db.relationship("Assistant", back_populates="period", cascade="all, delete, merge, save-update")
     leader = db.relationship("Leader", back_populates="period", cascade="all, delete, merge, save-update")
     holiday = db.relationship("Holiday", back_populates="period", cascade="all, delete, merge, save-update")

@@ -32,7 +32,7 @@ def insert(period_id, initial, name):
 
 
 def delete(id):
-    l = sess.query(Leader).filter_by(id=id).one()
+    l = sess.query(Leader).filter_by(id=id).one_or_none()
     sess.delete(l)
     sess.commit()
     return True

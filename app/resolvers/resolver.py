@@ -14,6 +14,7 @@ try:
     from app.resolvers.AssistantResolver import *
     from app.resolvers.HolidayResolver import *
     from app.resolvers.ShiftResolver import *
+    from app.resolvers.SpecialShiftResolver import *
 except ImportError:
     print ('importing modulename failed')
 
