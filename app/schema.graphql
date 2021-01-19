@@ -1,7 +1,6 @@
 scalar JSON
 
 type Query{
-    hello:String!
     GetUser(username:String!,password:String!):LoginData
 
     # periods
@@ -22,6 +21,9 @@ type Query{
 
     #shift
     GetAssistantShifts(assistant_id:Int!):[Shift]
+
+    #special shift
+    GetSpecialShiftByPeriodId(period_id:Int!):[SpecialShift]
 }
 
 type Mutation{
@@ -55,7 +57,8 @@ type Mutation{
 
     #Special Shift
     InsertSpecialShift(period_id:Int!, description:String!, assistant_ids:String!, date:String!, _in:String!, _out:String!):String
-
+    UpdateSpecialShift(id:Int!, period_id:Int!, description:String!, assistant_ids:String!, date:String!, _in:String!, _out:String!):String
+    DeleteSpecialShift(id:Int!):String
 }
 
 type Shift {

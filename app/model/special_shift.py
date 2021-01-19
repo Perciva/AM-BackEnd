@@ -30,37 +30,79 @@ class SpecialShift(db.Model):
 
 
 def insert(period_id, description, assistant_ids, date, _in, _out):
-    ss = SpecialShift(period_id, description, assistant_ids, date, _in, _out)
-    sess.add(ss)
-    sess.commit()
-    return True
+    from app.model.assistant import Assistant
+
+    ast = assistant_ids.split(',')
+    ast = map(trim, ast)
+
+    error = ""
+    for a in ast:
+        res = sess.query(Assistant).filter_by(initial=a).one_or_none()
+        if res is None:
+            error = error + "Assistant With Initial " + a + " Not Found!, "
+
+    if error == "":
+        ss = SpecialShift(period_id, description, assistant_ids, date, _in, _out)
+        sess.add(ss)
+        sess.commit()
+        return "Success"
+    else:
+        return error
+
 
 def delete(id):
-    ss = sess.query(SpecialShift).filter_by(id=id).one()
-    sess.delete(ss)
-    sess.commit()
-    return True
+    ss = sess.query(SpecialShift).filter_by(id=id).one_or_none()
+
+    if ss is None:
+        return "Special Shift with id "+ str(id) + " Not Found!"
+    else:
+        sess.delete(ss)
+        sess.commit()
+        return "Success"
+
 
 def update(id, period_id, description, assistant_ids, date, _in, _out):
     ss = sess.query(SpecialShift).filter_by(id=id).one()
 
     if ss:
-        ss.period_id = period_id
-        ss.description = description
-        ss.assistant_ids = assistant_ids
-        ss._in = _in
-        ss._out = _out
-        ss.date = date
-        ss.updated_at = datetime.now()
+        from app.model.assistant import Assistant
 
-        sess.add(ss)
-        sess.commit()
+        ast = assistant_ids.split(',')
+        ast = map(trim, ast)
 
-        return True
+        error = ""
+        for a in ast:
+            res = sess.query(Assistant).filter_by(initial=a).one_or_none()
+            if res is None:
+                error = error + "Assistant With Initial " + a + " Not Found!, "
+
+        if error == "":
+            ss.period_id = period_id
+            ss.description = description
+            ss.assistant_ids = assistant_ids
+            ss._in = _in
+            ss._out = _out
+            ss.date = date
+            ss.updated_at = datetime.now()
+
+            sess.add(ss)
+            sess.commit()
+            return "Success"
+        else:
+            return error
     else:
-        return False
+        return "Special Shift with Id " + str(id) + " Not Found!"
+
+
+
+
+
 
 def getAllSpecialShiftByPeriodId(period_id):
-    ss = sess.query(SpecialShift).filter_by(period_id = period_id).all()
+    ss = sess.query(SpecialShift).filter_by(period_id=period_id).all()
 
     return ss
+
+
+def trim(s):
+    return s.strip()
