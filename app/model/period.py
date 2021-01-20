@@ -48,6 +48,14 @@ def getAllPeriod():
     # print(res)
     return res
 
+def getPeriodById(period_id):
+    period = sess.query(Period).filter_by(id=period_id).one_or_none()
+
+    if period is None:
+        return "Period with id " + str(period_id) + " Not Found!"
+    else:
+        return period
+
 
 def delete(id):
     sess.query(Period).filter_by(id=id).delete()

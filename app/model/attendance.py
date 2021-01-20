@@ -42,20 +42,35 @@ class Attendance(db.Model):
         self.updated_at = datetime.now()
 
 
-def insert(assistant_id, date, _in, _out, in_permission, out_permission, special_permission, in_permission_description,
-           out_permission_description, special_permission_description):
-    attendance = Attendance(assistant_id, date, _in, _out, in_permission, out_permission, special_permission,
-                            in_permission_description, out_permission_description, special_permission_description)
-    sess.add(attendance)
-    sess.commit()
+def insert(assistant_initial, date, _in, _out):
+    from app.model.assistant import Assistant
 
-    return "Success"
+    ast = sess.query(Assistant).filter_by(initial = assistant_initial).one_or_none()
 
-def update(id, assistant_id, date, _in, _out, in_permission, out_permission, special_permission, in_permission_description,
+    if ast is None:
+        return "Assistant with initial " + assistant_initial + " Not Found!"
+    else:
+        att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id = ast.id)
+        if att:
+            att._in = _in
+            att._out = _out
+            sess.add(att)
+            sess.commit()
+
+        else:
+            attendance = Attendance(ast.id, date, _in, _out, "", "", "", "", "")
+            sess.add(attendance)
+            sess.commit()
+
+        return "Success"
+
+
+def update(id, assistant_id, date, _in, _out, in_permission, out_permission, special_permission,
+           in_permission_description,
            out_permission_description, special_permission_description):
     attendance = sess.query(Attendance).filter_by(id=id).one_or_none()
     if attendance is None:
-        return "Attendance with id "+ str(id) + " Not Found!"
+        return "Attendance with id " + str(id) + " Not Found!"
     else:
         attendance.assistant_id = assistant_id
         attendance.date = date
@@ -74,6 +89,7 @@ def update(id, assistant_id, date, _in, _out, in_permission, out_permission, spe
 
         return "Success"
 
+
 def delete(id):
     attendance = sess.query(Attendance).filter_by(id=id).one_or_none()
     if attendance is None:
@@ -82,6 +98,7 @@ def delete(id):
         sess.delete(attendance)
         sess.commit()
         return "Success"
+
 
 def getAttendanceByPeriodId(period_id):
     attendance = sess.query(Attendance).filter_by(period_id=period_id).all()

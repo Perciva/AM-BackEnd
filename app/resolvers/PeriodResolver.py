@@ -7,6 +7,10 @@ def getAllPeriods(_,info):
     res = period.getAllPeriod()
     return res
 
+@query.field("GetPeriodById")
+def getPeriodById(_, info, period_id):
+    return period.getPeriodById(period_id)
+
 @mutation.field("InsertPeriod")
 # @jwt_required
 def InsertPeriod(_,info,description,start,end):
