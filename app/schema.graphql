@@ -62,7 +62,7 @@ type Mutation{
     DeleteSpecialShift(id:Int!):String
 
     #attendance
-    InsertAttendance(assistant_initial:String!, date:String, _in:String, _out:String):String
+    InsertAttendance(assistant_initial:String!, date:String!, _in:String!, _out:String!):String
 }
 
 type Shift {
