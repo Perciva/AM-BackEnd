@@ -50,32 +50,29 @@ def insert(assistant_initial, date, _in, _out):
     if ast is None:
         return "Assistant with initial " + assistant_initial + " Not Found!"
     else:
-        att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id = ast.id)
-        if att:
+        att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id = ast.id).one_or_none()
+        if att is not None:
             att._in = _in
             att._out = _out
+            att.updated_at = datetime.now()
             sess.add(att)
             sess.commit()
 
         else:
-            attendance = Attendance(ast.id, date, _in, _out, "", "", "", "", "")
+            attendance = Attendance(ast.id, date, _in, _out, "", "", "", "", "","")
             sess.add(attendance)
             sess.commit()
 
         return "Success"
 
 
-def update(id, assistant_id, date, _in, _out, in_permission, out_permission, special_permission,
+def update(id, in_permission, out_permission, special_permission,
            in_permission_description,
            out_permission_description, special_permission_description):
     attendance = sess.query(Attendance).filter_by(id=id).one_or_none()
     if attendance is None:
         return "Attendance with id " + str(id) + " Not Found!"
     else:
-        attendance.assistant_id = assistant_id
-        attendance.date = date
-        attendance._in = _in
-        attendance._out = _out
         attendance.in_permission = in_permission
         attendance.in_permission_description = in_permission_description
         attendance.out_permission = out_permission
