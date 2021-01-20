@@ -49,7 +49,7 @@ def insert(assistant_id, date, _in, _out, in_permission, out_permission, special
     sess.add(attendance)
     sess.commit()
 
-    pass
+    return "Success"
 
 def update(id, assistant_id, date, _in, _out, in_permission, out_permission, special_permission, in_permission_description,
            out_permission_description, special_permission_description):
@@ -68,3 +68,24 @@ def update(id, assistant_id, date, _in, _out, in_permission, out_permission, spe
         attendance.special_permission = special_permission
         attendance.special_permission_description = special_permission_description
         attendance.updated_at = datetime.now()
+
+        sess.add(attendance)
+        sess.commit()
+
+        return "Success"
+
+def delete(id):
+    attendance = sess.query(Attendance).filter_by(id=id).one_or_none()
+    if attendance is None:
+        return "Attendance with id " + str(id) + " Not Found!"
+    else:
+        sess.delete(attendance)
+        sess.commit()
+        return "Success"
+
+def getAttendanceByPeriodId(period_id):
+    attendance = sess.query(Attendance).filter_by(period_id=period_id).all()
+    if attendance == []:
+        return "Attendance with Period ID " + str(period_id) + " Not Found!"
+    else:
+        return attendance

@@ -23,6 +23,7 @@ mutation = MutationType()
 
 # migrate = Migrate(app,db)
 def init_db():
+    from app.model.attendance import Attendance
     from app.model.special_shift import SpecialShift
     from app.model.leader import Leader
     from app.model.attendance import Attendance
