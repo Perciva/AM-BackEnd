@@ -32,14 +32,15 @@ class SpecialShift(db.Model):
 def insert(period_id, description, assistant_ids, date, _in, _out):
     from app.model.assistant import Assistant
 
-    ast = assistant_ids.split(',')
-    ast = map(trim, ast)
-
     error = ""
-    for a in ast:
-        res = sess.query(Assistant).filter_by(initial=a).one_or_none()
-        if res is None:
-            error = error + "Assistant With Initial " + a + " Not Found!, "
+    if assistant_ids != "ALL":
+        ast = assistant_ids.split(',')
+        ast = map(trim, ast)
+
+        for a in ast:
+            res = sess.query(Assistant).filter_by(initial=a).one_or_none()
+            if res is None:
+                error = error + "Assistant With Initial " + a + " Not Found!, "
 
     if error == "":
         ss = SpecialShift(period_id, description, assistant_ids, date, _in, _out)
@@ -66,15 +67,16 @@ def update(id, period_id, description, assistant_ids, date, _in, _out):
 
     if ss:
         from app.model.assistant import Assistant
-
-        ast = assistant_ids.split(',')
-        ast = map(trim, ast)
-
         error = ""
-        for a in ast:
-            res = sess.query(Assistant).filter_by(initial=a).one_or_none()
-            if res is None:
-                error = error + "Assistant With Initial " + a + " Not Found!, "
+        if assistant_ids != "ALL":
+            ast = assistant_ids.split(',')
+            ast = map(trim, ast)
+
+            error = ""
+            for a in ast:
+                res = sess.query(Assistant).filter_by(initial=a).one_or_none()
+                if res is None:
+                    error = error + "Assistant With Initial " + a + " Not Found!, "
 
         if error == "":
             ss.period_id = period_id

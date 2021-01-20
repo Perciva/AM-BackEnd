@@ -18,7 +18,7 @@ class Assistant(db.Model):
     period = db.relationship("Period", back_populates="assistant")
     leader = db.relationship("Leader", back_populates="assistant")
     shift = db.relationship("Shift", back_populates="assistant", cascade="all, delete, merge, save-update")
-    # attendance = db.relationship("Attendance", back_populates="assistant")
+    attendance = db.relationship("Attendance", back_populates="assistant", cascade="all, delete, merge, save-update")
 
     def __init__(self, period_id, leader_id, initial, name):
         self.period_id = period_id
