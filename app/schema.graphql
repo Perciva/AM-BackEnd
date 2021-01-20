@@ -48,8 +48,8 @@ type Mutation{
     DeleteAssistant(id: Int!):Boolean
 
     #holiday
-    InsertHoliday(period_id:Int!, description:String!, date:String!):Boolean
-    UpdateHoliday(id:Int!, description:String!, date:String!):Boolean
+    InsertHoliday(period_id:Int!, description:String!, date:String!):String
+    UpdateHoliday(id:Int!, description:String!, date:String!):String
     DeleteHoliday(id:Int!):Boolean
 
     #Shift
@@ -66,7 +66,11 @@ type Mutation{
 
     #attendance
     InsertAttendance(assistant_initial:String!, date:String!, _in:String!, _out:String!):String
+    UpdateAttendance(id:Int!, in_permission:String, out_permission:String, special_permission:String,
+           in_permission_description:String,
+           out_permission_description:String, special_permission_description:String):String
 }
+
 type Attendance{
     id:Int
     assistant_id : Int

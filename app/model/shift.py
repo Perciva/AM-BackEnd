@@ -25,9 +25,18 @@ class Shift(db.Model):
 
 
 def insert(assistant_id, day, _in, _out):
-    shift = Shift(assistant_id, day, _in, _out)
-    sess.add(shift)
-    sess.commit()
+    ss = sess.query(Shift).filter_by(assistant_id=assistant_id).filter_by(day=day).one_or_none()
+
+    if ss is None:
+        shift = Shift(assistant_id, day, _in, _out)
+        sess.add(shift)
+        sess.commit()
+    else:
+        ss._in = _in
+        ss._out = _out
+        ss.updated_at = datetime.now()
+        sess.add(ss)
+        sess.commit()
     return True
 
 

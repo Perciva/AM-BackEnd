@@ -24,10 +24,16 @@ class Holiday(db.Model):
 
 
 def insert(period_id, description, date):
-    holiday = Holiday(period_id, description, date, datetime.now(), datetime.now())
-    sess.add(holiday)
-    sess.commit()
-    return True
+    holiday = sess.query(Holiday).filter_by(period_id = period_id).filter_by(date=date).one_or_none()
+
+    if holiday is None:
+        holiday = Holiday(period_id, description, date, datetime.now(), datetime.now())
+        sess.add(holiday)
+        sess.commit()
+        return "Success"
+    else:
+        return "Holiday with date " + date + "Already Exists!"
+
 
 
 def delete(id):
@@ -37,19 +43,25 @@ def delete(id):
 
 
 def update(id, description, date):
-    holiday = sess.query(Holiday).filter_by(id=id).one()
+    holiday = sess.query(Holiday).filter_by(id=id).one_or_none()
 
-    if holiday != []:
-        holiday.date = date
-        holiday.description = description
-        holiday.updated_at = datetime.now()
+    if holiday is None:
+        holiday = sess.query(Holiday).filter_by(id=id).filter_by(date=date).one_or_none()
 
-        sess.add(holiday)
-        sess.commit()
+        if holiday != []:
+            holiday.date = date
+            holiday.description = description
+            holiday.updated_at = datetime.now()
 
-        return True
+            sess.add(holiday)
+            sess.commit()
+
+            return "Success"
+        else:
+            return "Holiday with date " + str(date) + " Already Exists!"
     else:
-        return False
+        return "Holiday with ID " + str(id) + "Does Not Exists!"
+
 
 
 def getAllHolidayByPeriodID(period_id):

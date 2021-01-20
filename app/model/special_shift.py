@@ -96,10 +96,6 @@ def update(id, period_id, description, assistant_ids, date, _in, _out):
         return "Special Shift with Id " + str(id) + " Not Found!"
 
 
-
-
-
-
 def getAllSpecialShiftByPeriodId(period_id):
     ss = sess.query(SpecialShift).filter_by(period_id=period_id).all()
 
