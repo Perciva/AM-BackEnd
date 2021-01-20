@@ -49,9 +49,9 @@ def update(id, description, date):
     holiday = sess.query(Holiday).filter_by(id=id).one_or_none()
 
     if holiday is not None:
-        holiday = sess.query(Holiday).filter_by(id=id).filter_by(date=date).one_or_none()
+        checkHoliday = sess.query(Holiday).filter_by(id=id).filter_by(date=date).one_or_none()
 
-        if holiday is None:
+        if checkHoliday is None:
             holiday.date = date
             holiday.description = description
             holiday.updated_at = datetime.now()
