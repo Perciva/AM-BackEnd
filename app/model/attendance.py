@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP
+from sqlalchemy import Column, Integer, String, TIMESTAMP, tuple_
 from app.database import db, sess
 from datetime import datetime
 
@@ -65,7 +65,6 @@ def insert(assistant_initial, date, _in, _out):
 
         return "Success"
 
-
 def update(id, in_permission, out_permission, special_permission,
            in_permission_description,
            out_permission_description, special_permission_description):
@@ -96,10 +95,37 @@ def delete(id):
         sess.commit()
         return "Success"
 
+def getAllAttendanceByDate( start_date, end_date, assistant_id):
+    attendance = sess.query(Attendance).filter_by(assistant_id = assistant_id).all()
 
-def getAttendanceByPeriodId(period_id):
-    attendance = sess.query(Attendance).filter_by(period_id=period_id).all()
+    result = list()
     if attendance == []:
-        return "Attendance with Period ID " + str(period_id) + " Not Found!"
+        return "Attendance for assistant with id " + str(assistant_id) + " Not Found!"
     else:
-        return attendance
+        for att in attendance:
+            res = dict()
+
+            startdate = datetime.date(datetime.strptime(start_date, "%Y-%m-%d"))
+            enddate = datetime.date(datetime.strptime(end_date, "%Y-%m-%d"))
+
+            if(att.date >= startdate and att.date <= enddate):
+                res["attendance"] = att
+                res["special_shift"] = None
+
+                from app.model.special_shift import SpecialShift
+                print(att.assistant.initial)
+                ss = sess.query(SpecialShift).filter(SpecialShift.assistant_ids.contains(att.assistant.initial)).all()
+
+                ssresult = list()
+                for s in ss:
+                    if (s.date >= startdate and s.date <= enddate):
+                        print(s.date)
+                        ssresult.append(s)
+
+                if ssresult != []:
+                    res["special_shift"] = ssresult
+                result.append(res)
+
+
+
+        return result

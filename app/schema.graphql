@@ -25,6 +25,9 @@ type Query{
     #special shift
     GetSpecialShiftByPeriodId(period_id:Int!):[SpecialShift]
 
+    #attendance
+    GetAllAttendanceByDate(start_date:String!, end_date:String!, assistant_id:Int!):[Report]
+
 }
 
 type Mutation{
@@ -64,6 +67,24 @@ type Mutation{
     #attendance
     InsertAttendance(assistant_initial:String!, date:String!, _in:String!, _out:String!):String
 }
+type Attendance{
+    id:Int
+    assistant_id : Int
+    date: String
+    _in : String
+    _out: String
+    in_permission:String
+    out_permission:String
+    special_permission:String
+    in_permission_description:String
+    out_permission_description:String
+    special_permission_description:String
+    assistant:Assistant
+}
+type Report{
+    attendance:Attendance
+    special_shift: [SpecialShift]
+}
 
 type Shift {
     id : Int
@@ -71,6 +92,7 @@ type Shift {
     day : Int
     _in : String
     _out : String
+
 }
 
 type Assistant{
@@ -79,6 +101,7 @@ type Assistant{
     leader: Leader
     initial: String
     name: String
+    shift:[Shift]
 }
 
 type Leader{
