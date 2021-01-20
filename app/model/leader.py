@@ -8,7 +8,7 @@ class Leader(db.Model):
     __tablename__ = 'leaders'
     id = db.Column(db.Integer, primary_key=True)
     period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id', ondelete="CASCADE"))
-    initial = db.Column('initial', db.String(6), unique=True)
+    initial = db.Column('initial', db.String(7))
     name = db.Column('name', db.String(255))
     created_at = db.Column('created_at', db.TIMESTAMP)
     updated_at = db.Column('updated_at', db.TIMESTAMP)
@@ -25,6 +25,7 @@ class Leader(db.Model):
 
 
 def insert(period_id, initial, name):
+
     l = Leader(period_id, initial, name, datetime.now(), datetime.now())
     sess.add(l)
     sess.commit()

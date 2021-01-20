@@ -10,7 +10,7 @@ class Assistant(db.Model):
     id = db.Column(db.Integer, primary_key = True)
     period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id', ondelete="CASCADE"))
     leader_id = db.Column('leader_id', db.Integer, db.ForeignKey('leaders.id', ondelete="CASCADE"))
-    initial = db.Column('initial', db.String(6), unique=True)
+    initial = db.Column('initial', db.String(7))
     name = db.Column('name', db.String(255))
     created_at = db.Column('created_at', db.TIMESTAMP)
     updated_at = db.Column('updated_at', db.TIMESTAMP)

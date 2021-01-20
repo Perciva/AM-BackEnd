@@ -32,20 +32,23 @@ def insert(period_id, description, date):
         sess.commit()
         return "Success"
     else:
-        return "Holiday with date " + date + "Already Exists!"
+        return "Holiday with date " + date + " Already Exists!"
 
 
 
 def delete(id):
-    sess.query(Holiday).filter_by(id=id).delete()
-    sess.commit()
-    return True
+    try:
+        sess.query(Holiday).filter_by(id=id).delete()
+        sess.commit()
+        return True
+    except:
+        return False
 
 
 def update(id, description, date):
     holiday = sess.query(Holiday).filter_by(id=id).one_or_none()
 
-    if holiday is None:
+    if holiday is not None:
         holiday = sess.query(Holiday).filter_by(id=id).filter_by(date=date).one_or_none()
 
         if holiday != []:
