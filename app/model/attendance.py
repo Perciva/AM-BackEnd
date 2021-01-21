@@ -89,16 +89,6 @@ def update(id, in_permission, out_permission, special_permission,
         return "Success"
 
 
-def delete(id):
-    attendance = sess.query(Attendance).filter_by(id=id).one_or_none()
-    if attendance is None:
-        return "Attendance with id " + str(id) + " Not Found!"
-    else:
-        sess.delete(attendance)
-        sess.commit()
-        return "Success"
-
-
 def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
     from app.model.shift import Shift
     from app.model.special_shift import SpecialShift
@@ -218,7 +208,7 @@ def getAllAttendanceByDate(start_date, end_date, assistant_id):
                 res["special_shift"] = None
 
                 from app.model.special_shift import SpecialShift
-                # print(att.assistant.initial)
+
                 ss = sess.query(SpecialShift).filter(or_(
                     SpecialShift.assistant_ids.contains(att.assistant.initial),
                     SpecialShift.assistant_ids == "ALL")).order_by(SpecialShift.date.asc()).all()

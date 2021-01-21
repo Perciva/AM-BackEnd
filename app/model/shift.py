@@ -78,10 +78,10 @@ def getAssistantShifts(assistant_id):
     return shift
 
 
-def insertByAssistatInitial(assistant_initial, day, _in, _out):
+def insertByAssistatInitial(assistant_initial, period_id, day, _in, _out):
     from app.model.assistant import Assistant
 
-    ast = sess.query(Assistant).filter_by(initial=assistant_initial).one_or_none()
+    ast = sess.query(Assistant).filter_by(initial=assistant_initial).filter_by(period_id=period_id).one_or_none()
     if ast:
         shift = Shift(ast.id, day, _in, _out)
         sess.add(shift)
@@ -89,4 +89,4 @@ def insertByAssistatInitial(assistant_initial, day, _in, _out):
 
         return "Success"
     else:
-        return "Assistant "+ assistant_initial+" Not Found!"
+        return "Assistant "+ assistant_initial+" Not Found In The Selected Period!"
