@@ -50,7 +50,7 @@ def update(id, description, date):
 
     if holiday is not None:
         checkHoliday = sess.query(Holiday).filter_by(date=date).one_or_none()
-
+        date = datetime.date(datetime.strptime(date,"%Y-%m-%d"))
         if checkHoliday is None or holiday.date == date:
             holiday.date = date
             holiday.description = description
