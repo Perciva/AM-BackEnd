@@ -42,13 +42,13 @@ class Attendance(db.Model):
         self.updated_at = datetime.now()
 
 
-def insert(assistant_initial, date, _in, _out):
+def insert(assistant_initial, period_id, date, _in, _out):
     from app.model.assistant import Assistant
 
-    ast = sess.query(Assistant).filter_by(initial = assistant_initial).one_or_none()
+    ast = sess.query(Assistant).filter_by(initial = assistant_initial).filter_by(period_id=period_id).one_or_none()
 
     if ast is None:
-        return "Assistant with initial " + assistant_initial + " Not Found!"
+        return "Assistant with initial " + assistant_initial + " Not Found In The Selected Period!"
     else:
         att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id = ast.id).one_or_none()
         if att is not None:
@@ -96,11 +96,11 @@ def delete(id):
         return "Success"
 
 def getAllAttendanceByDate( start_date, end_date, assistant_id):
-    attendance = sess.query(Attendance).filter_by(assistant_id = assistant_id).all()
 
+    attendance = sess.query(Attendance).filter_by(assistant_id = assistant_id).order_by(Attendance.date.asc()).all()
     result = list()
     if attendance == []:
-        return "Attendance for assistant with id " + str(assistant_id) + " Not Found!"
+        return list("Attendance for assistant with id " + str(assistant_id) + " Not Found!")
     else:
         for att in attendance:
             res = dict()
@@ -113,9 +113,10 @@ def getAllAttendanceByDate( start_date, end_date, assistant_id):
                 res["special_shift"] = None
 
                 from app.model.special_shift import SpecialShift
-                print(att.assistant.initial)
-                ss = sess.query(SpecialShift).filter(SpecialShift.assistant_ids.contains(att.assistant.initial)).all()
-
+                # print(att.assistant.initial)
+                ss = sess.query(SpecialShift).filter(SpecialShift.assistant_ids.contains(att.assistant.initial)).order_by(SpecialShift.date.asc()).all()
+                # from app.tools import color
+                # color.pred("SEPARATOR")
                 ssresult = list()
                 for s in ss:
                     if (s.date >= startdate and s.date <= enddate):
