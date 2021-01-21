@@ -7,8 +7,8 @@ def insertShift(_, info, assistant_id, day, _in, _out):
     return shift.insert(assistant_id, day, _in, _out)
 
 @mutation.field("InsertShiftByAssistantInitial")
-def insertShiftByAssistantInitial(_, info, assistant_initial, day, _in, _out):
-    return shift.insertByAssistatInitial(assistant_initial, day, _in, _out)
+def insertShiftByAssistantInitial(_, info, assistant_initial, period_id, day, _in, _out):
+    return shift.insertByAssistatInitial(assistant_initial,period_id, day, _in, _out)
 
 
 @mutation.field("UpdateShift")

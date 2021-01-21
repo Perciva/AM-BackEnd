@@ -55,7 +55,7 @@ type Mutation{
 
     #Shift
     InsertShift(assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
-    InsertShiftByAssistantInitial(assistant_initial:String!, day:Int!, _in:String!, _out:String!):String
+    InsertShiftByAssistantInitial(assistant_initial:String!,period_id:Int!, day:Int!, _in:String!, _out:String!):String
     UpdateShift(id:Int!, assistant_id:Int!, day:Int!, _in:String!, _out:String!):Boolean
     DeleteShift(id:Int!):Boolean
     DeleteAllAssistantShifts(assistant_id:Int!):Boolean
