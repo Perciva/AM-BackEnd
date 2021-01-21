@@ -37,8 +37,8 @@ def insert(period_id, leader_id, initial, name):
         sess.commit()
         return "Success"
     else:
-        from app.tools import color
-        color.pred("Assistant With Initial " + initial + " Already Exists In The Selected Period!")
+        # from app.tools import color
+        # color.pred("Assistant With Initial " + initial + " Already Exists In The Selected Period!")
         return "Assistant With Initial " + initial + " Already Exists In The Selected Period!"
 
 
@@ -66,7 +66,7 @@ def update(id, period_id, leader_id, initial, name):
     else:
         checkast = sess.query(Assistant).filter_by(period_id=period_id).filter_by(initial=initial).one_or_none()
         if checkast is not None:
-            return "Assistant With Initial",initial,"Already Exists In The Selected Period!"
+            return "Assistant With Initial " + initial + " Already Exists In The Selected Period!"
         else:
             ast.leader_id = leader_id
             ast.initial = initial
