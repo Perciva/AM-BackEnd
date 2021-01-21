@@ -98,9 +98,10 @@ def delete(id):
 def getAllAttendanceByDate( start_date, end_date, assistant_id):
 
     attendance = sess.query(Attendance).filter_by(assistant_id = assistant_id).order_by(Attendance.date.asc()).all()
+
     result = list()
     if attendance == []:
-        return list("Attendance for assistant with id " + str(assistant_id) + " Not Found!")
+        return None
     else:
         for att in attendance:
             res = dict()
@@ -115,8 +116,7 @@ def getAllAttendanceByDate( start_date, end_date, assistant_id):
                 from app.model.special_shift import SpecialShift
                 # print(att.assistant.initial)
                 ss = sess.query(SpecialShift).filter(SpecialShift.assistant_ids.contains(att.assistant.initial)).order_by(SpecialShift.date.asc()).all()
-                # from app.tools import color
-                # color.pred("SEPARATOR")
+
                 ssresult = list()
                 for s in ss:
                     if (s.date >= startdate and s.date <= enddate):
