@@ -1,13 +1,12 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, ForeignKey
-from app.database  import db, sess
+from app.database import db, sess
 from sqlalchemy.orm import relationship
 from datetime import datetime
 
 
 class Assistant(db.Model):
-    
     __tablename__ = 'assistants'
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     period_id = db.Column('period_id', db.Integer, db.ForeignKey('periods.id', ondelete="CASCADE"))
     leader_id = db.Column('leader_id', db.Integer, db.ForeignKey('leaders.id', ondelete="CASCADE"))
     initial = db.Column('initial', db.String(7))
@@ -30,20 +29,27 @@ class Assistant(db.Model):
 
 
 def insert(period_id, leader_id, initial, name):
-    ast = Assistant(period_id, leader_id, initial, name)
-    sess.add(ast)
-    sess.commit()
-    return True
+    ast = sess.query(Assistant).filter_by(period_id=period_id).filter_by(initial=initial).one_or_none()
+
+    if ast is None:
+        ast = Assistant(period_id, leader_id, initial, name)
+        sess.add(ast)
+        sess.commit()
+        return "Success"
+    else:
+        from app.tools import color
+        color.pred("Assistant With Initial " + initial + " Already Exists In The Selected Period!")
+        return "Assistant With Initial " + initial + " Already Exists In The Selected Period!"
+
 
 def insertByLeaderInitial(period_id, leader_initial, initial, name):
     from app.model.leader import Leader
-    leader = sess.query(Leader).filter_by(initial=leader_initial).first()
+    leader = sess.query(Leader).filter_by(initial=leader_initial).filter_by(period_id=period_id).one_or_none()
+    if leader is None:
+        return "There Is No Leader " + leader_initial + "In The Selected Period!"
+    else:
+        return insert(period_id, leader.id, initial, name)
 
-    ast = Assistant(period_id, leader.id, initial, name)
-    sess.add(ast)
-    sess.commit()
-
-    pass
 
 def delete(id):
     ast = sess.query(Assistant).filter_by(id=id).one()
@@ -51,42 +57,42 @@ def delete(id):
     sess.commit()
     return True
 
-def update(id, leader_id, initial, name):
-    ast = sess.query(Assistant).filter_by(id=id).one()
 
-    if ast != []:
-        ast.leader_id = leader_id
-        ast.initial = initial
-        ast.name = name
-        ast.updated_at = datetime.now()
+def update(id, period_id, leader_id, initial, name):
+    ast = sess.query(Assistant).filter_by(id=id).one_or_none()
 
-        sess.add(ast)
-        sess.commit()
-
-        return True
+    if ast is None:
+        return "Assistant with ID",id,"Not Found!"
     else:
-        return False
+        checkast = sess.query(Assistant).filter_by(period_id=period_id).filter_by(initial=initial).one_or_none()
+        if checkast is not None:
+            return "Assistant With Initial",initial,"Already Exists In The Selected Period!"
+        else:
+            ast.leader_id = leader_id
+            ast.initial = initial
+            ast.name = name
+            ast.updated_at = datetime.now()
+
+            sess.add(ast)
+            sess.commit()
+
+            return "Success"
+
 
 def getAssistantByID(id):
     ast = sess.query(Assistant).filter_by(id=id).one()
     return ast
 
+
 def getAllAssistant():
     ast = sess.query(Assistant).all()
-    
+
     return ast
 
+
 def getAssistantByPeriodID(period_id):
-    ast = sess.query(Assistant).filter_by(period_id = period_id).all()
+    ast = sess.query(Assistant).filter_by(period_id=period_id).all()
     return ast
 
 # def getAssistantWithLeaderByPeriod():
 #     ast = sess.query(Assistant).join(Leader)
-
-
-    
-
-
-
-
-

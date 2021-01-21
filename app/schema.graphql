@@ -42,9 +42,9 @@ type Mutation{
     DeleteLeader(id:Int!):Boolean
 
     #assistant
-    InsertAssistant(period_id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
-    InsertAssistantByLeaderInitial(period_id:Int!, leader_initial:String!, initial:String!, name:String!):Boolean
-    UpdateAssistant(id:Int!, leader_id:Int!, initial:String!, name:String!):Boolean
+    InsertAssistant(period_id:Int!, leader_id:Int!, initial:String!, name:String!):String
+    InsertAssistantByLeaderInitial(period_id:Int!, leader_initial:String!, initial:String!, name:String!):String
+    UpdateAssistant(id:Int!,period_id:Int! leader_id:Int!, initial:String!, name:String!):String
     DeleteAssistant(id: Int!):Boolean
 
     #holiday

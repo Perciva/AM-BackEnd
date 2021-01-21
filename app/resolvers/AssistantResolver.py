@@ -16,8 +16,8 @@ def DeleteAssistant(_, info, id):
 
 @mutation.field("UpdateAssistant")
 # @jwt_required
-def UpdateAssistant(_, info, id, leader_id, initial, name):
-    return assistant.update(id, leader_id, initial, name)
+def UpdateAssistant(_, info, id, period_id, leader_id, initial, name):
+    return assistant.update(id, period_id, leader_id, initial, name)
 
 @mutation.field("InsertAssistantByLeaderInitial")
 def InsertAssistantByLeaderInitial(_,info, period_id, leader_initial, initial, name):

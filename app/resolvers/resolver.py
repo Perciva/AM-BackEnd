@@ -7,7 +7,6 @@ from flask_jwt_extended import (
 from app.model import period
 from app.database import query
 
-
 try:
     from app.resolvers.LeaderResolver import *
     from app.resolvers.PeriodResolver import *
@@ -17,18 +16,18 @@ try:
     from app.resolvers.SpecialShiftResolver import *
     from app.resolvers.AttendanceResolver import *
 except ImportError:
-    print ('importing modulename failed')
+    print('importing modulename failed')
 
 
 @query.field("GetUser")
-def getUser(_,info,username, password):
+def getUser(_, info, username, password):
     URL = "https://laboratory.binus.ac.id/lapi/api/Account/LogOnQualification"
 
     access_token = create_access_token(identity=username)
 
-    d ={
-        "username" : username,
-        "password" : password
+    d = {
+        "username": username,
+        "password": password
     }
     # temporary = {
     #     "Major" : "asd",
@@ -42,22 +41,16 @@ def getUser(_,info,username, password):
     #         "Token" :  access_token
     #     }
 
-    x = requests.post(URL,data = d)
-    if x.text == 'null':
+    x = requests.post(URL, data=d)
+    x = x.json()
+    print(x)
+    if x is None:
         return 'null'
-    else :
+    # elif "Software Assistant Supervisor" not in x["Role"]:
+    #     return "null"
+    else:
         resp = {
-            "UserData": x.json(),
-            "Token" :  access_token
+            "UserData": x,
+            "Token": access_token
         }
     return resp
-
-
-
-   
-
-
-
-
-
-
