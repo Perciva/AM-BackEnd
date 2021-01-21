@@ -49,11 +49,10 @@ def delete(id):
 
 
 def deleteAllAssistantShift(assistant_id):
-    sess.query(Shift).filter(Shift.assistant_id==assistant_id).delete(synchronize_session=False)
+    sess.query(Shift).filter(Shift.assistant_id == assistant_id).delete(synchronize_session=False)
     sess.commit()
 
     return True
-
 
 def update(id, assistant_id, day, _in, _out):
     shift = sess.query(Shift).filter_by(id=id).one()
@@ -77,16 +76,11 @@ def getAssistantShifts(assistant_id):
     shift = sess.query(Shift).filter_by(assistant_id=assistant_id).all()
     return shift
 
-
 def insertByAssistatInitial(assistant_initial, period_id, day, _in, _out):
     from app.model.assistant import Assistant
 
     ast = sess.query(Assistant).filter_by(initial=assistant_initial).filter_by(period_id=period_id).one_or_none()
     if ast:
-        shift = Shift(ast.id, day, _in, _out)
-        sess.add(shift)
-        sess.commit()
-
-        return "Success"
+        return insert(ast.id, day, _in, _out)
     else:
-        return "Assistant "+ assistant_initial+" Not Found In The Selected Period!"
+        return "Assistant " + assistant_initial + " Not Found In The Selected Period!"
