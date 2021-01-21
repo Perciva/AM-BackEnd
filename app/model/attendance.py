@@ -89,7 +89,7 @@ def update(id, in_permission, out_permission, special_permission,
         return "Success"
 
 
-def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
+def getAttendanceSummary(assistant_id, period_id, start_date, end_date, leader_initial):
     from app.model.shift import Shift
     from app.model.special_shift import SpecialShift
     from app.model.holiday import Holiday
@@ -153,7 +153,8 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
                 weekday = u.date.weekday()
                 # color.pmagenta(str(weekday))
                 weekday += 1
-                checkshift = s
+                checkshift = sess.query(Shift).filter(Shift.assistant_id == assistant_id).filter(
+                    Shift.day == weekday).one_or_none()
 
                 if checkshift is not None:
                     shift_in = checkshift._in
@@ -187,6 +188,8 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
     result["out"] = outPermissionResult
     result["special"] = specialPermissionResult
     result["unverified"] = unverifiedresult
+    result["leader"] = leader_initial
+
     return result
 
 
