@@ -142,29 +142,28 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
         # color.pgreen(str(u.date))
         checkholiday = sess.query(Holiday).filter(Holiday.date == u.date).one_or_none()
 
-        if checkholiday is not None: #kalau hari itu holiday
+        if checkholiday is not None:  # kalau hari itu holiday
             continue
         else:
             specialshift = sess.query(SpecialShift).filter(SpecialShift.period_id == period_id).filter(or_(
                 SpecialShift.assistant_ids.contains(initial), SpecialShift.assistant_ids == "ALL")).filter(
                 SpecialShift.date == u.date).order_by(SpecialShift.updated_at.desc()).first()
 
-            if specialshift is not None: #kalau hari itu ada special shift
+            if specialshift is not None:  # kalau hari itu ada special shift
                 shift_in = specialshift._in
                 shift_out = specialshift._out
 
-                if (u._in > shift_in) or (u._out < shift_out) :
+                if (u._in > shift_in) or (u._out < shift_out):
                     unverifiedresult += 1
                     continue
                 # color.pred(str(u._in))
                 # color.pred(str(shift_in))
                 # color.pred(str(u._in > shift_in))
-            else: #kalau tak ada special shift, check shift biasa
+            else:  # kalau tak ada special shift, check shift biasa
                 weekday = u.date.weekday()
                 # color.pmagenta(str(weekday))
                 weekday += 1
-                checkshift = sess.query(Shift).filter(Shift.assistant_id == assistant_id).filter(
-                    Shift.day == weekday).one_or_none()
+                checkshift = s
 
                 if checkshift is not None:
                     shift_in = checkshift._in
@@ -173,7 +172,6 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
                     if (u._in > shift_in) or (u._out < shift_out):
                         unverifiedresult += 1
                         continue
-
 
     for i in inpermission:
         if i.in_permission == "":
@@ -221,8 +219,9 @@ def getAllAttendanceByDate(start_date, end_date, assistant_id):
 
                 from app.model.special_shift import SpecialShift
                 # print(att.assistant.initial)
-                ss = sess.query(SpecialShift).filter(
-                    SpecialShift.assistant_ids.contains(att.assistant.initial)).order_by(SpecialShift.date.asc()).all()
+                ss = sess.query(SpecialShift).filter(or_(
+                    SpecialShift.assistant_ids.contains(att.assistant.initial),
+                    SpecialShift.assistant_ids == "ALL")).order_by(SpecialShift.date.asc()).all()
 
                 ssresult = list()
                 for s in ss:

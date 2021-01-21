@@ -21,5 +21,12 @@ def updateAttendance(_, info, id, in_permission, out_permission, special_permiss
                              out_permission_description, special_permission_description)
 
 @query.field("GetAttendanceSummary")
-def getAttendanceSummary(_, info, assistant_id, period_id, start_date, end_date):
+def getAssistantAttendanceSummary(_, info, assistant_id, period_id, start_date, end_date):
     return attendance.getAttendanceSummary(assistant_id, period_id, start_date, end_date)
+
+# @query.field("GetAllAssistantAttendanceSummary")
+def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
+    return
+
+def getAllAssistantAttendanceSummaryByLeader(_, info, period_id, leader_id, start_date, end_date):
+    return
