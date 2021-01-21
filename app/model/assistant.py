@@ -62,7 +62,7 @@ def update(id, period_id, leader_id, initial, name):
     ast = sess.query(Assistant).filter_by(id=id).one_or_none()
 
     if ast is None:
-        return "Assistant with ID",id,"Not Found!"
+        return "Assistant with ID "+id+" Not Found!"
     else:
         checkast = sess.query(Assistant).filter_by(period_id=period_id).filter_by(initial=initial).one_or_none()
         if checkast is not None:

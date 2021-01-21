@@ -25,11 +25,14 @@ class Leader(db.Model):
 
 
 def insert(period_id, initial, name):
-
-    l = Leader(period_id, initial, name, datetime.now(), datetime.now())
-    sess.add(l)
-    sess.commit()
-    return True
+    leader = sess.query(Leader).filter_by(initial=initial).filter_by(period_id=period_id).one_or_none()
+    if leader is None:
+        l = Leader(period_id, initial, name, datetime.now(), datetime.now())
+        sess.add(l)
+        sess.commit()
+        return "Success"''
+    else:
+        return "Leader With Initial " + initial + " Already Exists In The Selected Period!"
 
 
 def delete(id):
@@ -39,34 +42,34 @@ def delete(id):
     return True
 
 
-def update(id, initial, name):
-    l = sess.query(Leader).filter_by(id=id).one()
+def update(id,period_id, initial, name):
+    l = sess.query(Leader).filter_by(id=id).one_or_none()
 
-    if l != []:
-        l.initial = initial
-        l.name = name
-        l.updated_at = datetime.now()
-
-        sess.add(l)
-        sess.commit()
-
-        return True
+    if l is None:
+        return "Leader with ID "+id+" Not Found!"
     else:
-        return False
+        checkleader = sess.query(Leader).filter_by(period_id=period_id).filter_by(initial = initial).one_or_none()
+        if checkleader is None:
+            l.initial = initial
+            l.name = name
+            l.updated_at = datetime.now()
+
+            sess.add(l)
+            sess.commit()
+
+            return "Success"
+        else:
+            return "Leader With Initial " + initial + " Already Exists In The Selected Period!"
+
 
 
 def getLeaderByID(id):
-    l = sess.query(Leader).filter_by(id=id).one()
+    l = sess.query(Leader).filter_by(id=id).one_or_none()
     return l
 
 
 def getLeaderByPeriodID(period_id):
-    from pprint import pprint
-    ls = sess.query(Leader).filter(Leader.period_id == Period.id).filter(Leader.period_id == period_id).all()
-
-    for a in ls:
-        print(a.period.description)
-
+    ls = sess.query(Leader).filter(Leader.period_id == period_id).all()
     return ls
 
 

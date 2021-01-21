@@ -14,8 +14,8 @@ def deleteLeader(_,info,id):
 
 @mutation.field("UpdateLeader")
 # @jwt_required
-def updateLeader(_,info,id, initial, name):
-    return leader.update(id, initial, name)
+def updateLeader(_,info,id, period_id,initial, name):
+    return leader.update(id, period_id, initial, name)
 
 @query.field("GetLeaderById")
 # @jwt_required
