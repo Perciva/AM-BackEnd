@@ -40,7 +40,7 @@ def insert(period_id, description, assistant_ids, date, _in, _out):
         for a in ast:
             res = sess.query(Assistant).filter_by(initial=a).filter_by(period_id=period_id).one_or_none()
             if res is None:
-                error = error + "Assistant With Initial " + a + " Not Found In Period " + period_id
+                error = error + "Assistant With Initial " + str(a) + " Not Found In The Selected Period!"
 
     if error == "":
         ss = SpecialShift(period_id, description, assistant_ids, date, _in, _out)
@@ -76,7 +76,7 @@ def update(id, period_id, description, assistant_ids, date, _in, _out):
             for a in ast:
                 res = sess.query(Assistant).filter_by(initial=a).filter_by(period_id=period_id).one_or_none()
                 if res is None:
-                    error = error + "Assistant With Initial " + a + " Not Found In Period " + period_id
+                    error = error + "Assistant With Initial " + str(a)+ " Not Found In The Selected Period!"
 
         if error == "":
             ss.period_id = period_id

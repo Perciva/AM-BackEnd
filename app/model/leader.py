@@ -30,7 +30,7 @@ def insert(period_id, initial, name):
         l = Leader(period_id, initial, name, datetime.now(), datetime.now())
         sess.add(l)
         sess.commit()
-        return "Success"''
+        return "Success"
     else:
         return "Leader With Initial " + initial + " Already Exists In The Selected Period!"
 

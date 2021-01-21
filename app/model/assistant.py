@@ -46,7 +46,7 @@ def insertByLeaderInitial(period_id, leader_initial, initial, name):
     from app.model.leader import Leader
     leader = sess.query(Leader).filter_by(initial=leader_initial).filter_by(period_id=period_id).one_or_none()
     if leader is None:
-        return "There Is No Leader " + leader_initial + "In The Selected Period!"
+        return "There Is No Leader " + leader_initial + " In The Selected Period!"
     else:
         return insert(period_id, leader.id, initial, name)
 
