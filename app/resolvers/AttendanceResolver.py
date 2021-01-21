@@ -26,7 +26,7 @@ def getAssistantAttendanceSummary(_, info, assistant_id, period_id, start_date, 
     return attendance.getAttendanceSummary(assistant_id, period_id, start_date, end_date, "")
 
 
-# @query.field("GetAllAssistantAttendanceSummary")
+@query.field("GetAllAssistantAttendanceSummary")
 def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
     from app.model.assistant import Assistant
     from app.model.leader import Leader
@@ -39,11 +39,11 @@ def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
         assistants = sess.query(Assistant).filter(Assistant.period_id == period_id).filter(
             Assistant.leader_id == l.id).all()
         for s in assistants:
-            result.append()
+            result.append(attendance.getAttendanceSummary(s.id, period_id, start_date, end_date, l.initial))
 
-    return
+    return result
 
-
+@query.field("GetAllAssistantAttendanceSummaryByLeader")
 def getAllAssistantAttendanceSummaryByLeader(_, info, period_id, leader_id, start_date, end_date):
     from app.model.assistant import Assistant
 
