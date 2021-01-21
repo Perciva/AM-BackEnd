@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, TIMESTAMP, tuple_
+from sqlalchemy import Column, Integer, String, TIMESTAMP, and_, or_
 from app.database import db, sess
 from datetime import datetime
 from sqlalchemy import func
+from app.tools import color
 
 
 class Attendance(db.Model):
@@ -98,13 +99,107 @@ def delete(id):
         return "Success"
 
 
-def getAttendanceSummary(assistant_id, period_id, leader_id, start_date, end_date):
-    inpermission = sess.query(Attendance.in_permission, func.count(Attendance.in_permission)).group_by(
-        Attendance.in_permission).filter(Attendance.assistant_id == assistant_id).all()
+def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
+    from app.model.shift import Shift
+    from app.model.special_shift import SpecialShift
+    from app.model.holiday import Holiday
+    from app.model.assistant import Assistant
+
+    initial = sess.query(Assistant.initial).filter(Assistant.id == assistant_id).one_or_none()
+
+    if initial is None:
+        return None
+
+    initial = initial.initial
+    # color.pred(initial)
+    inpermission = sess.query(Attendance.in_permission, func.count(Attendance.in_permission).label('count')).group_by(
+        Attendance.in_permission).filter(Attendance.assistant_id == assistant_id).filter(
+        and_(Attendance.date >= start_date, Attendance.date <= end_date)).all()
+
+    outpermission = sess.query(Attendance.out_permission,
+                               func.count(Attendance.out_permission).label('count')).group_by(
+        Attendance.out_permission).filter(Attendance.assistant_id == assistant_id).filter(
+        and_(Attendance.date >= start_date, Attendance.date <= end_date)).all()
+
+    specialpermission = sess.query(Attendance.special_permission,
+                                   func.count(Attendance.special_permission).label('count')).group_by(
+        Attendance.special_permission).filter(Attendance.assistant_id == assistant_id).filter(
+        and_(Attendance.date >= start_date, Attendance.date <= end_date)).all()
+
+    unverifiedcount = sess.query(Attendance).filter(
+        Attendance.in_permission == "").filter(Attendance.out_permission == "").filter(
+        Attendance.special_permission == "").filter(
+        and_(Attendance.date >= start_date, Attendance.date <= end_date)).group_by(Attendance.date).all()
+
+    result = dict()
+
+    inPermissionResult = dict()
+    outPermissionResult = dict()
+    specialPermissionResult = dict()
+    unverifiedresult = 0;
+
+    for u in unverifiedcount:
+        # color.pgreen(str(u.date))
+        checkholiday = sess.query(Holiday).filter(Holiday.date == u.date).one_or_none()
+
+        if checkholiday is not None: #kalau hari itu holiday
+            continue
+        else:
+            specialshift = sess.query(SpecialShift).filter(SpecialShift.period_id == period_id).filter(or_(
+                SpecialShift.assistant_ids.contains(initial), SpecialShift.assistant_ids == "ALL")).filter(
+                SpecialShift.date == u.date).order_by(SpecialShift.updated_at.desc()).first()
+
+            if specialshift is not None: #kalau hari itu ada special shift
+                shift_in = specialshift._in
+                shift_out = specialshift._out
+
+                if (u._in > shift_in) or (u._out < shift_out) :
+                    unverifiedresult += 1
+                    continue
+                # color.pred(str(u._in))
+                # color.pred(str(shift_in))
+                # color.pred(str(u._in > shift_in))
+            else: #kalau tak ada special shift, check shift biasa
+                weekday = u.date.weekday()
+                # color.pmagenta(str(weekday))
+                weekday += 1
+                checkshift = sess.query(Shift).filter(Shift.assistant_id == assistant_id).filter(
+                    Shift.day == weekday).one_or_none()
+
+                if checkshift is not None:
+                    shift_in = checkshift._in
+                    shift_out = checkshift._out
+
+                    if (u._in > shift_in) or (u._out < shift_out):
+                        unverifiedresult += 1
+                        continue
+
 
     for i in inpermission:
-        print(i.in_permission)
+        if i.in_permission == "":
+            pass
+        else:
+            inPermissionResult[i.in_permission] = i.count
 
+    for i in outpermission:
+        if i.out_permission == "":
+            pass
+        else:
+            outPermissionResult[i.out_permission] = i.count
+
+    for i in specialpermission:
+        if i.special_permission == "":
+            pass
+        else:
+            specialPermissionResult[i.special_permission] = i.count
+        # print(dir(i))
+    # color.pred(str(inPermissionResult))
+    result["assistant"] = initial
+    result["in"] = inPermissionResult
+    result["out"] = outPermissionResult
+    result["special"] = specialPermissionResult
+    result["unverified"] = unverifiedresult
+    return result
 
 
 def getAllAttendanceByDate(start_date, end_date, assistant_id):
