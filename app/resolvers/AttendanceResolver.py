@@ -31,11 +31,15 @@ def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
     from app.model.assistant import Assistant
     from app.model.leader import Leader
 
+    result = list()
+
     leaders = sess.query(Leader).filter(Leader.period_id == period_id).all()
 
     for l in leaders:
         assistants = sess.query(Assistant).filter(Assistant.period_id == period_id).filter(
-            Assistant.leader_id == l.leader_id).all()
+            Assistant.leader_id == l.id).all()
+        for s in assistants:
+            result.append()
 
     return
 

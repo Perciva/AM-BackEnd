@@ -47,7 +47,7 @@ def delete(id):
 
 def update(id, description, date):
     holiday = sess.query(Holiday).filter_by(id=id).one_or_none()
-
+    date = date[0:10]
     if holiday is not None:
         checkHoliday = sess.query(Holiday).filter_by(date=date).one_or_none()
         # date = datetime.date(datetime.strptime(date,"%Y-%m-%d"))
