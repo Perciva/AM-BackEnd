@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, tuple_
 from app.database import db, sess
 from datetime import datetime
+from sqlalchemy import func
 
 
 class Attendance(db.Model):
@@ -45,12 +46,12 @@ class Attendance(db.Model):
 def insert(assistant_initial, period_id, date, _in, _out):
     from app.model.assistant import Assistant
 
-    ast = sess.query(Assistant).filter_by(initial = assistant_initial).filter_by(period_id=period_id).one_or_none()
+    ast = sess.query(Assistant).filter_by(initial=assistant_initial).filter_by(period_id=period_id).one_or_none()
 
     if ast is None:
         return "Assistant with initial " + assistant_initial + " Not Found In The Selected Period!"
     else:
-        att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id = ast.id).one_or_none()
+        att = sess.query(Attendance).filter_by(date=date).filter_by(assistant_id=ast.id).one_or_none()
         if att is not None:
             att._in = _in
             att._out = _out
@@ -59,11 +60,12 @@ def insert(assistant_initial, period_id, date, _in, _out):
             sess.commit()
 
         else:
-            attendance = Attendance(ast.id, date, _in, _out, "", "", "", "", "","")
+            attendance = Attendance(ast.id, date, _in, _out, "", "", "", "", "", "")
             sess.add(attendance)
             sess.commit()
 
         return "Success"
+
 
 def update(id, in_permission, out_permission, special_permission,
            in_permission_description,
@@ -95,9 +97,18 @@ def delete(id):
         sess.commit()
         return "Success"
 
-def getAllAttendanceByDate( start_date, end_date, assistant_id):
 
-    attendance = sess.query(Attendance).filter_by(assistant_id = assistant_id).order_by(Attendance.date.asc()).all()
+def getAttendanceSummary(assistant_id, period_id, leader_id, start_date, end_date):
+    inpermission = sess.query(Attendance.in_permission, func.count(Attendance.in_permission)).group_by(
+        Attendance.in_permission).filter(Attendance.assistant_id == assistant_id).all()
+
+    for i in inpermission:
+        print(i.in_permission)
+
+
+
+def getAllAttendanceByDate(start_date, end_date, assistant_id):
+    attendance = sess.query(Attendance).filter_by(assistant_id=assistant_id).order_by(Attendance.date.asc()).all()
 
     result = list()
     if attendance == []:
@@ -109,13 +120,14 @@ def getAllAttendanceByDate( start_date, end_date, assistant_id):
             startdate = datetime.date(datetime.strptime(start_date, "%Y-%m-%d"))
             enddate = datetime.date(datetime.strptime(end_date, "%Y-%m-%d"))
 
-            if(att.date >= startdate and att.date <= enddate):
+            if (att.date >= startdate and att.date <= enddate):
                 res["attendance"] = att
                 res["special_shift"] = None
 
                 from app.model.special_shift import SpecialShift
                 # print(att.assistant.initial)
-                ss = sess.query(SpecialShift).filter(SpecialShift.assistant_ids.contains(att.assistant.initial)).order_by(SpecialShift.date.asc()).all()
+                ss = sess.query(SpecialShift).filter(
+                    SpecialShift.assistant_ids.contains(att.assistant.initial)).order_by(SpecialShift.date.asc()).all()
 
                 ssresult = list()
                 for s in ss:
@@ -126,7 +138,5 @@ def getAllAttendanceByDate( start_date, end_date, assistant_id):
                 if ssresult != []:
                     res["special_shift"] = ssresult
                 result.append(res)
-
-
 
         return result

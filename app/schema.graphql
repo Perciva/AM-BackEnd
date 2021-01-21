@@ -27,6 +27,7 @@ type Query{
 
     #attendance
     GetAllAttendanceByDate(start_date:String!, end_date:String!, assistant_id:Int!):[Report]
+    GetAttendanceSummary(assistant_id:Int!, period_id:Int!, leader_id:Int!, start_date:String, end_date:String):SummaryReport
 
 }
 
@@ -70,7 +71,11 @@ type Mutation{
            in_permission_description:String,
            out_permission_description:String, special_permission_description:String):String
 }
+type SummaryReport{
+    leader: String
+    assistant:String
 
+}
 type Attendance{
     id:Int
     assistant_id : Int

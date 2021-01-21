@@ -48,8 +48,9 @@ def update(id,period_id, initial, name):
     if l is None:
         return "Leader with ID "+id+" Not Found!"
     else:
+
         checkleader = sess.query(Leader).filter_by(period_id=period_id).filter_by(initial = initial).one_or_none()
-        if checkleader is None:
+        if checkleader is None or l.initial == initial:
             l.initial = initial
             l.name = name
             l.updated_at = datetime.now()

@@ -65,9 +65,7 @@ def update(id, period_id, leader_id, initial, name):
         return "Assistant with ID "+id+" Not Found!"
     else:
         checkast = sess.query(Assistant).filter_by(period_id=period_id).filter_by(initial=initial).one_or_none()
-        if checkast is not None:
-            return "Assistant With Initial " + initial + " Already Exists In The Selected Period!"
-        else:
+        if checkast is None or ast.initial == initial:
             ast.leader_id = leader_id
             ast.initial = initial
             ast.name = name
@@ -77,6 +75,9 @@ def update(id, period_id, leader_id, initial, name):
             sess.commit()
 
             return "Success"
+        else:
+            return "Assistant With Initial " + initial + " Already Exists In The Selected Period!"
+
 
 
 def getAssistantByID(id):
