@@ -1,18 +1,23 @@
+from flask_jwt_extended import jwt_required
+
 from app.model import attendance
 from app.database import query, mutation, sess
 
 
 @mutation.field("InsertAttendance")
+@jwt_required
 def insertAttendance(_, info, assistant_initial, period_id, date, _in, _out):
     return attendance.insert(assistant_initial, period_id, date, _in, _out)
 
 
 @query.field("GetAllAttendanceByDate")
+@jwt_required
 def getAllAttendanceByDate(_, info, start_date, end_date, assistant_id):
     return attendance.getAllAttendanceByDate(start_date, end_date, assistant_id)
 
 
 @mutation.field("UpdateAttendance")
+@jwt_required
 def updateAttendance(_, info, id, in_permission, out_permission, special_permission,
                      in_permission_description,
                      out_permission_description, special_permission_description):
@@ -22,11 +27,13 @@ def updateAttendance(_, info, id, in_permission, out_permission, special_permiss
 
 
 @query.field("GetAttendanceSummary")
+@jwt_required
 def getAssistantAttendanceSummary(_, info, assistant_id, period_id, start_date, end_date):
     return attendance.getAttendanceSummary(assistant_id, period_id, start_date, end_date, "")
 
 
 @query.field("GetAllAssistantAttendanceSummary")
+@jwt_required
 def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
     from app.model.assistant import Assistant
     from app.model.leader import Leader
@@ -44,6 +51,7 @@ def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
     return result
 
 @query.field("GetAllAssistantAttendanceSummaryByLeader")
+@jwt_required
 def getAllAssistantAttendanceSummaryByLeader(_, info, period_id, leader_id, start_date, end_date):
     from app.model.assistant import Assistant
 
