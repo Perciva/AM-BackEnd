@@ -46,8 +46,8 @@ def getUser(_, info, username, password):
     print(x)
     if x is None:
         return 'null'
-    # elif "Software Assistant Supervisor" not in x["Role"]:
-    #     return "null"
+    elif "Software Assistant Supervisor" not in x["Role"]:
+        return "null"
     else:
         resp = {
             "UserData": x,
