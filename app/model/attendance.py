@@ -119,7 +119,8 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
     unverifiedcount = sess.query(Attendance).filter(
         Attendance.in_permission == "").filter(Attendance.out_permission == "").filter(
         Attendance.special_permission == "").filter(
-        and_(Attendance.date >= start_date, Attendance.date <= end_date)).group_by(Attendance.date).all()
+        and_(Attendance.date >= start_date, Attendance.date <= end_date)).filter(
+        Attendance.assistant_id == assistant_id).group_by(Attendance.date).all()
 
     result = dict()
 
