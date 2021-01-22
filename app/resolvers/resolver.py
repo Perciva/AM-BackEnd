@@ -7,16 +7,16 @@ from flask_jwt_extended import (
 from app.model import period
 from app.database import query
 
-try:
-    from app.resolvers.LeaderResolver import *
-    from app.resolvers.PeriodResolver import *
-    from app.resolvers.AssistantResolver import *
-    from app.resolvers.HolidayResolver import *
-    from app.resolvers.ShiftResolver import *
-    from app.resolvers.SpecialShiftResolver import *
-    from app.resolvers.AttendanceResolver import *
-except ImportError:
-    print('importing modulename failed')
+# try:
+from app.resolvers.LeaderResolver import *
+from app.resolvers.PeriodResolver import *
+from app.resolvers.AssistantResolver import *
+from app.resolvers.HolidayResolver import *
+from app.resolvers.ShiftResolver import *
+from app.resolvers.SpecialShiftResolver import *
+from app.resolvers.AttendanceResolver import *
+# except ImportError:
+    # print('importing modulename failed')
 
 
 @query.field("GetUser")

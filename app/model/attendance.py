@@ -1,4 +1,5 @@
 from sqlalchemy import Column, Integer, String, TIMESTAMP, and_, or_
+
 from app.database import db, sess
 from datetime import datetime
 from sqlalchemy import func
@@ -117,7 +118,6 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
         and_(Attendance.date >= start_date, Attendance.date <= end_date)).all()
 
     unverifiedcount = sess.query(Attendance).filter(
-        Attendance.in_permission == "").filter(Attendance.out_permission == "").filter(
         Attendance.special_permission == "").filter(
         and_(Attendance.date >= start_date, Attendance.date <= end_date)).filter(
         Attendance.assistant_id == assistant_id).group_by(Attendance.date).all()
@@ -133,8 +133,11 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
         # color.pgreen(str(u.date))
         checkholiday = sess.query(Holiday).filter(Holiday.date == u.date).filter(
             Holiday.period_id == period_id).one_or_none()
-
-        if checkholiday is not None:  # kalau hari itu holiday
+        weekday = u.date.weekday()
+        if weekday == 6:
+            continue
+        elif checkholiday is not None:  # kalau hari itu holiday
+            color.pred(str(u.date))
             continue
         else:
             specialshift = sess.query(SpecialShift).filter(SpecialShift.period_id == period_id).filter(or_(
@@ -145,10 +148,15 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
                 shift_in = specialshift._in
                 shift_out = specialshift._out
 
-                if (u._in > shift_in) or (u._out < shift_out):
-                    unverifiedresult += 1
-                    continue
+                checkclockin = sess.query(Attendance).filter(Attendance.id == u.id).filter(
+                    Attendance.in_permission == "").one_or_none() #kalau misal gada iazin clockin
+                checkclockout = sess.query(Attendance).filter(Attendance.id == u.id).filter(
+                    Attendance.out_permission == "").one_or_none()  # kalau misal gada iazin clockout
+
+
                 # color.pred(str(u._in))
+                if (checkclockin is not None and (u._in > shift_in)) or (checkclockout is not None and (u._out < shift_out)):
+                    unverifiedresult += 1
                 # color.pred(str(shift_in))
                 # color.pred(str(u._in > shift_in))
             else:  # kalau tak ada special shift, check shift biasa
@@ -162,9 +170,15 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
                     shift_in = checkshift._in
                     shift_out = checkshift._out
 
-                    if (u._in > shift_in) or (u._out < shift_out):
+                    checkclockin = sess.query(Attendance).filter(Attendance.id == u.id).filter(
+                        Attendance.in_permission == "").one_or_none()  # kalau misal gada iazin clockin
+                    checkclockout = sess.query(Attendance).filter(Attendance.id == u.id).filter(
+                        Attendance.out_permission == "").one_or_none()  # kalau misal gada iazin clockout
+
+                    # color.pred(str(u._in))
+                    if (checkclockin is not None and (u._in > shift_in)) or (
+                            checkclockout is not None and (u._out < shift_out)):
                         unverifiedresult += 1
-                        continue
 
     for i in inpermission:
         if i.in_permission == "":
