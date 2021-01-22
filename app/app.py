@@ -5,6 +5,7 @@ from flask_jwt_extended import (
 )
 app = Flask(__name__)
 app.config['JWT_SECRET_KEY'] = 'secret'
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = 7200
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:@localhost/testing'
 
 from ariadne import graphql_sync, make_executable_schema, load_schema_from_path, ObjectType
