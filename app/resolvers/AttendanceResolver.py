@@ -29,7 +29,7 @@ def updateAttendance(_, info, id, in_permission, out_permission, special_permiss
 @query.field("GetAttendanceSummary")
 @jwt_required
 def getAssistantAttendanceSummary(_, info, assistant_id, period_id, start_date, end_date):
-    return attendance.getAttendanceSummary(assistant_id, period_id, start_date, end_date, "")
+    return attendance.getAttendanceSummary(assistant_id, period_id, start_date, end_date)
 
 
 @query.field("GetAllAssistantAttendanceSummary")
@@ -46,7 +46,7 @@ def getAllAssistantAttendanceSummary(_, info, period_id, start_date, end_date):
         assistants = sess.query(Assistant).filter(Assistant.period_id == period_id).filter(
             Assistant.leader_id == l.id).all()
         for s in assistants:
-            result.append(attendance.getAttendanceSummary(s.id, period_id, start_date, end_date, l.initial))
+            result.append(attendance.getAttendanceSummary(s.id, period_id, start_date, end_date))
 
     return result
 
@@ -60,6 +60,6 @@ def getAllAssistantAttendanceSummaryByLeader(_, info, period_id, leader_id, star
 
     result = list()
     for s in assistants:
-        result.append(attendance.getAttendanceSummary(s.id, period_id, start_date, end_date, ""))
+        result.append(attendance.getAttendanceSummary(s.id, period_id, start_date, end_date))
 
     return result

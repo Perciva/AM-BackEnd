@@ -89,18 +89,18 @@ def update(id, in_permission, out_permission, special_permission,
         return "Success"
 
 
-def getAttendanceSummary(assistant_id, period_id, start_date, end_date, leader_initial):
+def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
     from app.model.shift import Shift
     from app.model.special_shift import SpecialShift
     from app.model.holiday import Holiday
     from app.model.assistant import Assistant
 
-    initial = sess.query(Assistant.initial).filter(Assistant.id == assistant_id).one_or_none()
+    ast = sess.query(Assistant).filter(Assistant.id == assistant_id).one_or_none()
 
-    if initial is None:
+    if ast is None:
         return None
 
-    initial = initial.initial
+    initial = ast.initial
     # color.pred(initial)
     inpermission = sess.query(Attendance.in_permission, func.count(Attendance.in_permission).label('count')).group_by(
         Attendance.in_permission).filter(Attendance.assistant_id == assistant_id).filter(
@@ -188,7 +188,7 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date, leader_i
     result["out"] = outPermissionResult
     result["special"] = specialPermissionResult
     result["unverified"] = unverifiedresult
-    result["leader"] = leader_initial
+    result["leader"] = ast.leader.initial
 
     return result
 
