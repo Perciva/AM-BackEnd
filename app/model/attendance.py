@@ -130,7 +130,8 @@ def getAttendanceSummary(assistant_id, period_id, start_date, end_date):
 
     for u in unverifiedcount:
         # color.pgreen(str(u.date))
-        checkholiday = sess.query(Holiday).filter(Holiday.date == u.date).one_or_none()
+        checkholiday = sess.query(Holiday).filter(Holiday.date == u.date).filter(
+            Holiday.period_id == period_id).one_or_none()
 
         if checkholiday is not None:  # kalau hari itu holiday
             continue
