@@ -50,6 +50,9 @@ def insertByLeaderInitial(period_id, leader_initial, initial, name):
     else:
         return insert(period_id, leader.id, initial, name)
 
+def getAssistantByLeaderId(leader_id, period_id):
+    ast = sess.query(Assistant).filter(Assistant.leader_id == leader_id).filter(Assistant.period_id == period_id).all()
+    return ast
 
 def delete(id):
     ast = sess.query(Assistant).filter_by(id=id).one()

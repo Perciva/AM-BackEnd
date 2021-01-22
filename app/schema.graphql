@@ -15,6 +15,7 @@ type Query{
     GetAllAssistant:[Assistant]
     GetAssistantById(id:Int!):Assistant
     GetAssistantByPeriodId(period_id:Int!):[Assistant]
+    GetAssistantByLeaderId(leader_id:Int!, period_id:Int!):[Assistant]
 
     # holiday
     GetHolidayByPeriodId(period_id:Int!):[Holiday]

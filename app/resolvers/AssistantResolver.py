@@ -39,6 +39,10 @@ def getAllAssistant(_, info):
 def getAssistantByID(_, info, id):
     return assistant.getAssistantByID(id)
 
+@query.field("GetAssistantByLeaderId")
+@jwt_required
+def getAssistantByLeaderId(_, info, leader_id, period_id):
+    return assistant.getAssistantByLeaderId(leader_id, period_id)
 
 @query.field("GetAssistantByPeriodId")
 @jwt_required
